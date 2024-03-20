@@ -1,4 +1,4 @@
-package com.paymentsystemex.dto;
+package com.paymentsystemex.dto.token;
 
 public class TokenRequest {
     private String email;

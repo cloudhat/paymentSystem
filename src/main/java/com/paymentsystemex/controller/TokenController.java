@@ -1,8 +1,8 @@
 package com.paymentsystemex.controller;
 
 
-import com.paymentsystemex.dto.TokenRequest;
-import com.paymentsystemex.dto.TokenResponse;
+import com.paymentsystemex.dto.token.TokenRequest;
+import com.paymentsystemex.dto.token.TokenResponse;
 import com.paymentsystemex.service.TokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
