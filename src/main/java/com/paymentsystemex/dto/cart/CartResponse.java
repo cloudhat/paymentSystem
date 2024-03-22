@@ -1,15 +1,10 @@
 package com.paymentsystemex.dto.cart;
 
 import com.paymentsystemex.domain.Cart;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor
 @Getter
 public class CartResponse {
     private Long id;
@@ -23,7 +18,7 @@ public class CartResponse {
 
     public static CartResponse fromEntity(Cart cart){
         CartResponse cartResponse = new CartResponse();
-        cartResponse.id = cart.getId();
+        cartResponse.id = cartResponse.getId();
         cartResponse.quantity = cart.getQuantity();
 
         cartResponse.productName = cart.getProduct().getName();
