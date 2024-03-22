@@ -2,6 +2,7 @@ package com.paymentsystemex.domain;
 
 import com.paymentsystemex.domain.member.Member;
 import com.paymentsystemex.domain.product.Product;
+import com.paymentsystemex.domain.product.ProductOption;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,4 +33,15 @@ public class Cart {
 
     @Column
     private int quantity;
+
+    public Cart(Member member, Product product ,ProductOption productOption, int quantity) {
+        this.member = member;
+        this.product = product;
+        this.productOption = productOption;
+        this.quantity = quantity;
+    }
+
+    public void updateQuantity(int delta){
+        this.quantity = quantity + delta;
+    }
 }
