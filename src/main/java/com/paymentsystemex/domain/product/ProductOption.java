@@ -27,9 +27,14 @@ public class ProductOption {
     @Column
     private int price;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime saleStartDt;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime saleEndDt;
+
+    public boolean isCurrentlyAvailable() {
+        LocalDateTime now = LocalDateTime.now();
+        return (saleStartDt == null || saleStartDt.isBefore(now)) && (saleEndDt == null || saleEndDt.isAfter(now));
+    }
 }
