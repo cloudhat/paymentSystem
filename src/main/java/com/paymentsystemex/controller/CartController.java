@@ -28,7 +28,7 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CartResponse>> shorCarts(@RequestBody CartRequest cartRequest , @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<List<CartResponse>> showCarts(@RequestBody CartRequest cartRequest , @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok().body(cartService.getCartResponses(userPrincipal));
     }
 
