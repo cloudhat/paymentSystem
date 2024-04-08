@@ -4,7 +4,7 @@ import com.paymentsystemex.auth.AuthenticationException;
 import com.paymentsystemex.auth.token.JwtTokenProvider;
 import com.paymentsystemex.auth.userdetails.UserDetails;
 import com.paymentsystemex.auth.userdetails.UserDetailsService;
-import com.paymentsystemex.dto.token.TokenResponse;
+import com.paymentsystemex.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.paymentsystemex.dto.member;
+package com.paymentsystemex.dto;
 
 
 import com.paymentsystemex.domain.member.Member;

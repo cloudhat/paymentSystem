@@ -1,7 +1,7 @@
 package com.paymentsystemex.acceptance;
 
 import com.paymentsystemex.domain.member.Member;
-import com.paymentsystemex.dto.token.TokenResponse;
+import com.paymentsystemex.dto.TokenResponse;
 import com.paymentsystemex.repository.MemberRepository;
 import com.paymentsystemex.utils.AcceptanceTest;
 import io.restassured.response.ExtractableResponse;

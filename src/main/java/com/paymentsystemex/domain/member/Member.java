@@ -52,5 +52,20 @@ public class Member {
         return role;
     }
 
+    public void update(Member member) {
+        this.email = member.email;
+        this.password = member.password;
+        this.age = member.age;
+    }
 
+    public boolean checkPassword(String password) {
+        return Objects.equals(this.password, password);
+    }
+
+    public static Member NULL = new Member() {
+        @Override
+        public Integer getAge() {
+            return null;
+        }
+    };
 }
