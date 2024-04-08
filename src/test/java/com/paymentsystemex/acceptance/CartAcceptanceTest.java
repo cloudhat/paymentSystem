@@ -157,7 +157,7 @@ public class CartAcceptanceTest extends AcceptanceTest {
      * When 해당 장바구니의 수량을 0 이하로 바꾸려고 시도하면
      * Then 400 Response 발생
      */
-    @DisplayName("카트의 수량을 0 이하로 변경한다")
+    @DisplayName("카트의 수량을 변경한다")
     @Test
     void updateQuantityToMinus() {
         //given
