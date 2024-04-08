@@ -39,12 +39,4 @@ public class ProductOption {
         LocalDateTime now = LocalDateTime.now();
         return (saleStartDt == null || saleStartDt.isBefore(now)) && (saleEndDt == null || saleEndDt.isAfter(now));
     }
-
-    public void setProduct(Product product){
-        if(this.product != null){
-            this.product.getProductOptions().remove(this);
-        }
-        this.product = product;
-        product.getProductOptions().add(this);
-    }
 }
