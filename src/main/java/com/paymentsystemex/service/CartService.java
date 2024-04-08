@@ -60,7 +60,6 @@ public class CartService {
                 .collect(Collectors.toList());
     }
 
-    //TODO : N+1 문제 해결
     private List<Cart> getAvailableCarts(Member member) {
         return cartRepository.findByMemberId(member.getId()).stream()
                 .filter(cart -> cart.getProductOption().isCurrentlyAvailable())
