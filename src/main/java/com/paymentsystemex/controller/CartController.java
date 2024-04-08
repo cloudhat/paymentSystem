@@ -3,7 +3,6 @@ package com.paymentsystemex.controller;
 
 import com.paymentsystemex.auth.principal.AuthenticationPrincipal;
 import com.paymentsystemex.auth.principal.UserPrincipal;
-import com.paymentsystemex.domain.Cart;
 import com.paymentsystemex.dto.cart.CartRequest;
 import com.paymentsystemex.dto.cart.CartResponse;
 import com.paymentsystemex.service.CartService;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,15 +20,26 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping
-    public ResponseEntity<Void> createCart(@RequestBody CartRequest cartRequest, @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Cart cart = cartService.saveCart(cartRequest, userPrincipal);
-        return ResponseEntity.created(URI.create("/carts/" + cart.getId())).build();
+    public ResponseEntity<CartResponse> createCart(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody CartRequest cartRequest) {
+        CartResponse cart = cartService.saveCart(cartRequest, userPrincipal);
+        return ResponseEntity.ok(cart);
     }
 
     @GetMapping
-    public ResponseEntity<List<CartResponse>> shorCarts(@RequestBody CartRequest cartRequest , @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<List<CartResponse>> showCarts(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok().body(cartService.getCartResponses(userPrincipal));
     }
 
+    @PutMapping("/{cartId}")
+    public ResponseEntity<CartResponse> updateCart(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long cartId, @RequestBody Integer changeAmount) {
+        cartService.updateCart(cartId, userPrincipal, changeAmount);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{cartId}")
+    public ResponseEntity<CartResponse> deleteCart(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long cartId) {
+        cartService.deleteCart(userPrincipal, cartId);
+        return ResponseEntity.noContent().build();
+    }
 }
 
