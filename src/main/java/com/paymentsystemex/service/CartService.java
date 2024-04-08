@@ -12,7 +12,6 @@ import com.paymentsystemex.repository.CartRepository;
 import com.paymentsystemex.repository.MemberRepository;
 import com.paymentsystemex.repository.ProductOptionRepository;
 import com.paymentsystemex.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,26 +30,23 @@ public class CartService {
     private final ProductOptionRepository productOptionRepository;
 
     @Transactional
-    public CartResponse saveCart(CartRequest cartRequest, UserPrincipal userPrincipal) {
+    public Cart saveCart(CartRequest cartRequest, UserPrincipal userPrincipal) {
         Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(AuthenticationException::new);
+        Product product = productRepository.getReferenceById(cartRequest.getProductId());
+        ProductOption productOption = productOptionRepository.findById(cartRequest.getProductOptionId()).orElseThrow(AuthenticationException::new);
 
-        Optional<Cart> alreadyExistingCart = getAvailableCarts(member.getId()).stream()
+        Optional<Cart> alreadyExistingCart  = getAvailableCarts(member).stream()
                 .filter(cart -> cartRequest.getProductOptionId().equals(cart.getProductOption().getId()))
                 .findFirst();
 
-        if (alreadyExistingCart.isPresent()) {
+        if(alreadyExistingCart.isPresent()){
             Cart cart = alreadyExistingCart.get();
             cart.updateQuantity(cartRequest.getQuantity());
-            return CartResponse.fromEntity(cart);
+            return cart;
         }
 
-        Product product = productRepository.getReferenceById(cartRequest.getProductId());
-        ProductOption productOption = productOptionRepository.findById(cartRequest.getProductOptionId()).orElseThrow(AuthenticationException::new);
         if (productOption.isCurrentlyAvailable()) {
-            Cart cart = new Cart(member, product, productOption, cartRequest.getQuantity());
-            cartRepository.save(cart);
-
-            return CartResponse.fromEntity(cart);
+            return cartRepository.save(new Cart(member, product, productOption, cartRequest.getQuantity()));
         } else {
             throw new IllegalArgumentException();
         }
@@ -59,43 +55,15 @@ public class CartService {
     public List<CartResponse> getCartResponses(UserPrincipal userPrincipal) {
         Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(AuthenticationException::new);
 
-        return this.getAvailableCarts(member.getId()).stream()
+        return this.getAvailableCarts(member).stream()
                 .map(CartResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    private List<Cart> getAvailableCarts(Long memberId) {
-        return cartRepository.findByMemberId(memberId).stream()
+    //TODO : N+1 문제 해결
+    private List<Cart> getAvailableCarts(Member member) {
+        return cartRepository.findByMemberId(member.getId()).stream()
                 .filter(cart -> cart.getProductOption().isCurrentlyAvailable())
                 .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void updateCart(Long cartId, UserPrincipal userPrincipal, int changeAmount) {
-        Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(AuthenticationException::new);
-
-        Optional<Cart> alreadyExistingCart = getAvailableCarts(member.getId()).stream()
-                .filter(cart -> cartId.equals(cart.getId()))
-                .findFirst();
-
-        if (alreadyExistingCart.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-
-        alreadyExistingCart.get().updateQuantity(changeAmount);
-    }
-
-    public void deleteCart(UserPrincipal userPrincipal, Long cartId) {
-        Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(AuthenticationException::new);
-
-        Optional<Cart> alreadyExistingCart = getAvailableCarts(member.getId()).stream()
-                .filter(cart -> cartId.equals(cart.getId()))
-                .findFirst();
-
-        if (alreadyExistingCart.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-
-        cartRepository.delete(cartId, member.getId());
     }
 }

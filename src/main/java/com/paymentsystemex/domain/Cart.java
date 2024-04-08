@@ -41,12 +41,7 @@ public class Cart {
         this.quantity = quantity;
     }
 
-    public void updateQuantity(int changeAmount){
-
-        if(getQuantity() + changeAmount <=0){
-            throw new IllegalArgumentException();
-        }
-
-        this.quantity = quantity + changeAmount;
+    public void updateQuantity(int delta){
+        this.quantity = quantity + delta;
     }
 }
