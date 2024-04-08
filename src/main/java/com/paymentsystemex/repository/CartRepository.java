@@ -27,10 +27,13 @@ public class CartRepository {
 
     public List<Cart> findByMemberId(Long memberId){
 
+        LocalDateTime now = LocalDateTime.now();
+
         return queryFactory
                 .selectFrom(cart)
-                .join(cart.productOption,productOption).fetchJoin()
-                .where(cart.member.id.eq(memberId))
+                .join(cart.productOption,productOption) //TODO : 이 줄 삭제하고 테스트해보기
+                .where(cart.member.id.eq(memberId)
+                        .and(productOption.saleStartDt.loe(now).and(productOption.saleEndDt.goe(now))))
                 .fetch();
     }
 }
