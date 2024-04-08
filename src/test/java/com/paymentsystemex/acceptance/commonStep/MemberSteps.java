@@ -26,13 +26,7 @@ public class MemberSteps {
                 .then().log().all().extract();
     }
 
-    public static String 회원가입_및_토큰_받기(String email,String password,int age){
-        회원_생성_요청(email, password, age);
-
-        return 로그인_요청(email, password).jsonPath().getString("accessToken");
-    }
-
-    public static ExtractableResponse<Response> 로그인_요청(String email, String password) {
+    public static String 로그인_요청(String email, String password) {
         Map<String, String> params = new HashMap<>();
         params.put("email", email);
         params.put("password", password);
@@ -42,7 +36,7 @@ public class MemberSteps {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(params)
                 .when().post("/login/token")
-                .then().log().all().statusCode(HttpStatus.OK.value()).extract();
+                .then().log().all().statusCode(HttpStatus.OK.value()).extract().jsonPath().getString("accessToken");
     }
 
 }
