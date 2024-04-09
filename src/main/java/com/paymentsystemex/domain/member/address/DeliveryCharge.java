@@ -1,15 +1,17 @@
 package com.paymentsystemex.domain.member.address;
 
+import lombok.Getter;
+
+@Getter
 public enum DeliveryCharge {
 
     METROPOLITAN_AREA(0),
     PROVINCE(1000),
     JEJU(5000);
 
+    private final int amount;
 
-    private final int deliveryCharge;
-
-    DeliveryCharge(int deliveryCharge) {
-        this.deliveryCharge = deliveryCharge;
+    DeliveryCharge(int amount) {
+        this.amount = amount;
     }
 }
