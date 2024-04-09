@@ -7,9 +7,6 @@ public enum DeliveryCharge {
     JEJU(5000);
 
 
-    private final int deliveryCharge;
-
     DeliveryCharge(int deliveryCharge) {
-        this.deliveryCharge = deliveryCharge;
     }
 }

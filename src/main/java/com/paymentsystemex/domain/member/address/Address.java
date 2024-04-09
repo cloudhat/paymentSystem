@@ -19,6 +19,10 @@ public class Address {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column
+    private boolean isDefault;
+
     @Enumerated(EnumType.STRING)
     private DeliveryCharge deliveryCharge;
+
 }

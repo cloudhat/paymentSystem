@@ -22,18 +22,32 @@ public class Coupon {
     @JoinColumn(name = "member_id")
     Member member;
 
-    @Column
-    private int discountPrice;
-
     @Column(nullable = false)
     private LocalDateTime expireDt;
 
-    @ColumnDefault("true")
+    @ColumnDefault("false")
     private boolean couponUsed;
 
     @Column
     private LocalDateTime usedDt;
 
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private boolean duplicationAllowed;
+
     @Enumerated(EnumType.STRING)
-    private CouponStatus couponStatus;
+    private CouponType couponType;
+
+    @Column(nullable = false)
+    private int minPurchaseAmount;
+
+    @Column(nullable = false)
+    private int discountAmount;
+
+    @Column(nullable = false)
+    private int discountRate;
+
+    @Column(nullable = false)
+    private int maxDiscountAmount;
+
 }
