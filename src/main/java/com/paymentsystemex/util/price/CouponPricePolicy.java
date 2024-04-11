@@ -12,7 +12,7 @@ public class CouponPricePolicy extends PricePolicy {
 
     @Override
     public int calculatePrice(int price) {
-        return 0;
+        return coupons.getDiscountedPrice(price);
     }
 
 }

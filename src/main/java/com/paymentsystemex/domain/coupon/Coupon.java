@@ -2,15 +2,15 @@ package com.paymentsystemex.domain.coupon;
 
 import com.paymentsystemex.domain.member.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Getter
 public class Coupon {
 
@@ -50,4 +50,19 @@ public class Coupon {
     @Column(nullable = false)
     private int maxDiscountAmount;
 
+    public int discount(int price) {
+        if (CouponType.FIXED.equals(couponType)) {
+            return price - discountAmount;
+        } else if (CouponType.RATE.equals(couponType)) {
+            int calculatedPrice = price * (100 - discountRate) / 100;
+            return calculatedPrice < maxDiscountAmount ? calculatedPrice : maxDiscountAmount;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public boolean isAvailable() {
+        LocalDateTime now = LocalDateTime.now();
+        return !couponUsed && expireDt.isAfter(now);
+    }
 }

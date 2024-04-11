@@ -12,6 +12,6 @@ public class DeliveryFeePolicy extends PricePolicy {
 
     @Override
     public int calculatePrice(int price) {
-        return 0;
+        return price + address.getDeliveryCharge().getAmount();
     }
 }
