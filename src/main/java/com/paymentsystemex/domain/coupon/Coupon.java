@@ -1,16 +1,17 @@
 package com.paymentsystemex.domain.coupon;
 
 import com.paymentsystemex.domain.member.Member;
+import com.paymentsystemex.domain.order.Orders;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 @Getter
 public class Coupon {
 
@@ -21,6 +22,9 @@ public class Coupon {
     @ManyToOne
     @JoinColumn(name = "member_id")
     Member member;
+
+    @Column
+    private String name;
 
     @Column(nullable = false)
     private LocalDateTime expireDt;
@@ -50,12 +54,30 @@ public class Coupon {
     @Column(nullable = false)
     private int maxDiscountAmount;
 
-    public int discount(int price) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Orders orders;
+
+    @Builder
+    public Coupon(Member member, String name, LocalDateTime expireDt, boolean couponUsed, boolean duplicationAllowed, CouponType couponType, int minPurchaseAmount, int discountAmount, int discountRate, int maxDiscountAmount) {
+        this.member = Objects.requireNonNull(member);
+        this.name = Objects.requireNonNull(name);
+        this.expireDt = Objects.requireNonNull(expireDt);
+        this.couponUsed = Objects.requireNonNull(couponUsed);
+        this.duplicationAllowed = Objects.requireNonNull(duplicationAllowed);
+        this.couponType = Objects.requireNonNull(couponType);
+        this.minPurchaseAmount = Objects.requireNonNull(minPurchaseAmount);
+        this.discountAmount = Objects.requireNonNull(discountAmount);
+        this.discountRate = Objects.requireNonNull(discountRate);
+        this.maxDiscountAmount = Objects.requireNonNull(maxDiscountAmount);
+    }
+
+    public int getDiscountAmount(int price) {
         if (CouponType.FIXED.equals(couponType)) {
-            return price - discountAmount;
+            return discountAmount;
         } else if (CouponType.RATE.equals(couponType)) {
-            int calculatedPrice = price * (100 - discountRate) / 100;
-            return calculatedPrice < maxDiscountAmount ? calculatedPrice : maxDiscountAmount;
+            int calculatedDiscountAmount = price * discountRate / 100;
+            return Math.min(calculatedDiscountAmount, maxDiscountAmount);
         } else {
             throw new IllegalArgumentException();
         }
@@ -64,5 +86,11 @@ public class Coupon {
     public boolean isAvailable() {
         LocalDateTime now = LocalDateTime.now();
         return !couponUsed && expireDt.isAfter(now);
+    }
+
+    public void markAsUsed(Orders orders) {
+        this.orders = orders;
+        this.couponUsed = true;
+        this.usedDt = LocalDateTime.now();
     }
 }

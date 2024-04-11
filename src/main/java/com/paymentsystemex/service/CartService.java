@@ -10,7 +10,6 @@ import com.paymentsystemex.dto.cart.CartRequest;
 import com.paymentsystemex.dto.cart.CartResponse;
 import com.paymentsystemex.repository.CartRepository;
 import com.paymentsystemex.repository.MemberRepository;
-import com.paymentsystemex.repository.ProductOptionRepository;
 import com.paymentsystemex.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ public class CartService {
     private final CartRepository cartRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
-    private final ProductOptionRepository productOptionRepository;
 
     @Transactional
     public CartResponse saveCart(CartRequest cartRequest, UserPrincipal userPrincipal) {
@@ -45,7 +43,7 @@ public class CartService {
         }
 
         Product product = productRepository.getReferenceById(cartRequest.getProductId());
-        ProductOption productOption = productOptionRepository.findById(cartRequest.getProductOptionId()).orElseThrow(AuthenticationException::new);
+        ProductOption productOption = productRepository.findProductOptionById(cartRequest.getProductOptionId()).orElseThrow(AuthenticationException::new);
         if (productOption.isCurrentlyAvailable()) {
             Cart cart = new Cart(member, product, productOption, cartRequest.getQuantity());
             cartRepository.save(cart);

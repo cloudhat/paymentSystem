@@ -5,7 +5,6 @@ import com.paymentsystemex.acceptance.commonStep.MemberSteps;
 import com.paymentsystemex.domain.product.Product;
 import com.paymentsystemex.domain.product.ProductOption;
 import com.paymentsystemex.dto.cart.CartResponse;
-import com.paymentsystemex.repository.ProductOptionRepository;
 import com.paymentsystemex.repository.ProductRepository;
 import com.paymentsystemex.utils.AcceptanceTest;
 import io.restassured.RestAssured;
@@ -26,10 +25,6 @@ public class CartAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private ProductOptionRepository productOptionRepository;
-
 
     private static final String EMAIL = "email1@email.com";
     private static final String PASSWORD = "password1";
@@ -52,16 +47,16 @@ public class CartAcceptanceTest extends AcceptanceTest {
 
         Product product = new Product(null, null, PRODUCT_NAME);
 
-        productRepository.save(product);
+        productRepository.saveProduct(product);
         productId = product.getId();
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime yesterday = now.minusDays(1);
         LocalDateTime tomorrow = now.plusDays(1);
-        ProductOption availableProductOption = new ProductOption(null, product, AVAILABLE_PRODUCT_OPTION_NAME, 25000, yesterday, tomorrow);
-        ProductOption unAvailableProductOption = new ProductOption(null, product, "M 사이즈", 35000, tomorrow, tomorrow);
-        productOptionRepository.save(availableProductOption);
-        productOptionRepository.save(unAvailableProductOption);
+        ProductOption availableProductOption = new ProductOption(1, null, product, AVAILABLE_PRODUCT_OPTION_NAME, 25000, 1, yesterday, tomorrow);
+        ProductOption unAvailableProductOption = new ProductOption(1, null, product, "M 사이즈", 35000, 1, tomorrow, tomorrow);
+        productRepository.saveProductOption(availableProductOption);
+        productRepository.saveProductOption(unAvailableProductOption);
 
         availableProductOptionId = availableProductOption.getId();
         unAvailableProductOptionId = unAvailableProductOption.getId();

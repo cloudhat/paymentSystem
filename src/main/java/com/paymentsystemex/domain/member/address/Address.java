@@ -3,11 +3,13 @@ package com.paymentsystemex.domain.member.address;
 import com.paymentsystemex.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
 public class Address {
 

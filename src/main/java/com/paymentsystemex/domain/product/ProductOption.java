@@ -1,6 +1,5 @@
 package com.paymentsystemex.domain.product;
 
-import com.paymentsystemex.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,6 +13,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 public class ProductOption {
+
+    @Version
+    private Integer version;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +31,9 @@ public class ProductOption {
     @Column
     private int price;
 
+    @Column
+    int quantity;
+
     @Column(nullable = false)
     private LocalDateTime saleStartDt;
 
@@ -38,5 +43,14 @@ public class ProductOption {
     public boolean isCurrentlyAvailable() {
         LocalDateTime now = LocalDateTime.now();
         return (saleStartDt == null || saleStartDt.isBefore(now)) && (saleEndDt == null || saleEndDt.isAfter(now));
+    }
+
+    public void updateQuantity(int changeAmount) {
+
+        if (getQuantity() + changeAmount < 0) {
+            throw new IllegalArgumentException("Quantity cannot be negative");
+        }
+
+        this.quantity = quantity + changeAmount;
     }
 }

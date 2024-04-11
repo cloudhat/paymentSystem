@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.paymentsystemex.domain.QCart.cart;
 import static com.paymentsystemex.domain.product.QProduct.product;
@@ -20,6 +19,7 @@ public class CartRepository {
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;
 
+    @Transactional
     public Cart save(Cart cart) {
         em.persist(cart);
 
@@ -37,10 +37,19 @@ public class CartRepository {
     }
 
     @Transactional
-    public void delete(Long cartId , Long memberId){
-        long execute = queryFactory
+    public void delete(Long cartId, Long memberId) {
+        queryFactory
                 .delete(cart)
                 .where(cart.id.eq(cartId)
+                        .and(cart.member.id.eq(memberId)))
+                .execute();
+    }
+
+    @Transactional
+    public void bulkDelete(List<Long> cartIdList, Long memberId) {
+        queryFactory
+                .delete(cart)
+                .where(cart.id.in(cartIdList)
                         .and(cart.member.id.eq(memberId)))
                 .execute();
     }
