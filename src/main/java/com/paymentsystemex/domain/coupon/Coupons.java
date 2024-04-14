@@ -1,11 +1,5 @@
 package com.paymentsystemex.domain.coupon;
 
-import com.paymentsystemex.domain.order.OrderPriceHistory;
-import com.paymentsystemex.domain.order.Orders;
-import com.paymentsystemex.domain.order.PriceType;
-
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -13,69 +7,48 @@ import java.util.List;
  */
 
 public class Coupons {
-    private final List<Coupon> couponList;
+    private final List<Coupon> coupons;
 
     //쿠폰은 최대 2개만 적용 가능
-    private static final int MAX_COUPON_APPLICABLE_COUNT = 2;
+    private final int MAX_COUPON_APPLICABLE_COUNT = 2;
 
     //중복적용 불가 쿠폰은 1개만 적용가능
-    private static final int MAX_NOT_DUPLICATED_COUPON_COUNT = 1;
+    private final int MAX_NOT_DUPLICATED_COUPON_COUNT = 1;
 
     //비율할인 쿠폰은 1개만 적용가능
-    private static final int MAX_RATE_COUPON_COUNT = 1;
+    private final int MAX_RATE_COUPON_COUNT = 1;
 
-    public Coupons(List<Coupon> couponList) {
-        validateAvailable(couponList);
-        validateSize(couponList);
-        validateDuplicateAvailable(couponList);
-        validateRateCouponCount(couponList);
-        this.couponList = couponList;
-    }
+    public int getDiscountedPrice(int price) {
 
-    /**
-     * 아래 메소드는 4가지 작업을 수행한다
-     * 0.최소구매금액 만족여부 검증
-     * 1.결제가격에서 할인액수 차감
-     * 2.OrderPriceHistory 엔티티 생성
-     * 3.쿠폰 사용 처리
-     */
-
-    public List<OrderPriceHistory> getOrderPriceHistoryAndMarkAsUsed(int price, Orders orders) {
-
-        if(couponList.isEmpty()){
-            return new ArrayList<>();
-        }
-
-        //0.최소구매금액 만족여부 검증
-        validateMinPurchaseAmount(couponList, price);
-
-        List<OrderPriceHistory> orderPriceHistoryList = new ArrayList<>();
-
-        //쿠폰의 적용 순서에 따라 정렬
-        List<Coupon> sortedCoupons = couponList.stream()
-                .sorted(Comparator.comparing(coupon -> coupon.getCouponType().getApplicationOrder()))
+        List<Coupon> fixedCoupons = coupons.stream()
+                .filter(coupon -> CouponType.FIXED.equals(coupon.getCouponType()))
                 .toList();
 
-        for (Coupon coupon : sortedCoupons) {
-            int discountAmount = coupon.getDiscountAmount(price);
+        List<Coupon> rateCoupons = coupons.stream()
+                .filter(coupon -> CouponType.RATE.equals(coupon.getCouponType())).toList();
 
-            //1.결제가격에서 할인액수 차감
-            price -= discountAmount;
-
-            //2.OrderPriceHistory 엔티티 생성
-            OrderPriceHistory orderPriceHistory = new OrderPriceHistory(orders, PriceType.COUPON, coupon.getName(), -discountAmount);
-            orderPriceHistoryList.add(orderPriceHistory);
-
-            //3.쿠폰 사용 처리
-            coupon.markAsUsed(orders);
+        for (Coupon coupon : fixedCoupons) {
+            price = coupon.discount(price);
         }
 
-        return orderPriceHistoryList;
+        for (Coupon coupon : rateCoupons) {
+            price = coupon.discount(price);
+        }
+
+        return price;
     }
 
+    public Coupons(List<Coupon> coupons, int totalPrice) {
+        validateAvailable(coupons);
+        validateMinPurchaseAmount(coupons, totalPrice);
+        validateSize(coupons);
+        validateDuplicateAvailable(coupons);
+        validateRateCouponCount(coupons);
+        this.coupons = coupons;
+    }
 
-    private void validateAvailable(List<Coupon> couponList) {
-        boolean anyUnavailable = couponList.stream()
+    private void validateAvailable(List<Coupon> coupons) {
+        boolean anyUnavailable = coupons.stream()
                 .anyMatch(coupon -> !coupon.isAvailable());
 
         if (anyUnavailable) {
@@ -83,8 +56,8 @@ public class Coupons {
         }
     }
 
-    private void validateMinPurchaseAmount(List<Coupon> couponList, int totalPrice) {
-        boolean underMinPurchaseAmount = couponList.stream()
+    private void validateMinPurchaseAmount(List<Coupon> coupons, int totalPrice) {
+        boolean underMinPurchaseAmount = coupons.stream()
                 .anyMatch(coupon -> totalPrice < coupon.getMinPurchaseAmount());
 
         if (underMinPurchaseAmount) {
@@ -92,24 +65,24 @@ public class Coupons {
         }
     }
 
-    private void validateSize(List<Coupon> couponList) {
-        if (couponList.size() > MAX_COUPON_APPLICABLE_COUNT) {
+    private void validateSize(List<Coupon> coupons) {
+        if (coupons.size() > MAX_COUPON_APPLICABLE_COUNT) {
             throw new IllegalArgumentException("Exceeded maximum number of coupons applicable");
         }
     }
 
-    private void validateDuplicateAvailable(List<Coupon> couponList) {
-        int duplicationAllowedCount = (int) couponList.stream()
+    private void validateDuplicateAvailable(List<Coupon> coupons) {
+        int duplicationAllowedCount = (int) coupons.stream()
                 .filter(Coupon::isDuplicationAllowed)
                 .count();
 
-        if (duplicationAllowedCount < couponList.size() - MAX_NOT_DUPLICATED_COUPON_COUNT) {
+        if (duplicationAllowedCount < coupons.size() - MAX_NOT_DUPLICATED_COUPON_COUNT) {
             throw new IllegalArgumentException("Exceeded maximum number of not duplication allowed coupons applicable");
         }
     }
 
-    private void validateRateCouponCount(List<Coupon> couponList) {
-        int rateCouponCount = (int) couponList.stream()
+    private void validateRateCouponCount(List<Coupon> coupons) {
+        int rateCouponCount = (int) coupons.stream()
                 .filter(coupon -> CouponType.RATE.equals(coupon.getCouponType()))
                 .count();
         if (rateCouponCount > MAX_RATE_COUPON_COUNT) {
