@@ -52,7 +52,7 @@ public class Coupons {
                 .anyMatch(coupon -> !coupon.isAvailable());
 
         if (anyUnavailable) {
-            throw new IllegalArgumentException("One or more coupons are unavailable.");
+            throw new IllegalArgumentException("One or more coupons are unavailable");
         }
     }
 

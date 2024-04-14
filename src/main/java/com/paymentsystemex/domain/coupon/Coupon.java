@@ -6,11 +6,11 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 @Getter
 public class Coupon {
 
@@ -50,12 +50,26 @@ public class Coupon {
     @Column(nullable = false)
     private int maxDiscountAmount;
 
+    @Builder
+    public Coupon(Member member, LocalDateTime expireDt, boolean couponUsed, boolean duplicationAllowed, CouponType couponType, int minPurchaseAmount, int discountAmount, int discountRate, int maxDiscountAmount) {
+        this.member = Objects.requireNonNull(member);
+        this.expireDt = Objects.requireNonNull(expireDt);
+        this.couponUsed = Objects.requireNonNull(couponUsed);
+        this.duplicationAllowed = Objects.requireNonNull(duplicationAllowed);
+        this.couponType = Objects.requireNonNull(couponType);
+        this.minPurchaseAmount = Objects.requireNonNull(minPurchaseAmount);
+        this.discountAmount = Objects.requireNonNull(discountAmount);
+        this.discountRate = Objects.requireNonNull(discountRate);
+        this.maxDiscountAmount = Objects.requireNonNull(maxDiscountAmount);
+    }
+
     public int discount(int price) {
         if (CouponType.FIXED.equals(couponType)) {
             return price - discountAmount;
         } else if (CouponType.RATE.equals(couponType)) {
             int calculatedPrice = price * (100 - discountRate) / 100;
-            return calculatedPrice < maxDiscountAmount ? calculatedPrice : maxDiscountAmount;
+            int maxDiscountedPrice = price - maxDiscountAmount;
+            return calculatedPrice > maxDiscountedPrice ? calculatedPrice : maxDiscountedPrice;
         } else {
             throw new IllegalArgumentException();
         }
