@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.paymentsystemex.domain.QCart.cart;
 import static com.paymentsystemex.domain.product.QProduct.product;
@@ -36,8 +35,18 @@ public class CartRepository {
                 .fetch();
     }
 
+    public List<Cart> findByCartIds(List<Long> cartIds, Long memberId) {
+        return queryFactory
+                .selectFrom(cart)
+                .join(cart.product, product).fetchJoin()
+                .join(cart.productOption, productOption).fetchJoin()
+                .where(cart.id.in(cartIds)
+                        .and(cart.member.id.eq(memberId)))
+                .fetch();
+    }
+
     @Transactional
-    public void delete(Long cartId , Long memberId){
+    public void delete(Long cartId, Long memberId) {
         long execute = queryFactory
                 .delete(cart)
                 .where(cart.id.eq(cartId)
