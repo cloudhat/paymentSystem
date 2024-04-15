@@ -59,5 +59,4 @@ public class OrderProduct {
 
         orders.getOrderProducts().add(this);
     }
-
 }

@@ -19,7 +19,6 @@ public class CartRepository {
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;
 
-    @Transactional
     public Cart save(Cart cart) {
         em.persist(cart);
 
@@ -36,20 +35,21 @@ public class CartRepository {
                 .fetch();
     }
 
-    @Transactional
-    public void delete(Long cartId, Long memberId) {
-        queryFactory
-                .delete(cart)
-                .where(cart.id.eq(cartId)
+    public List<Cart> findByCartIds(List<Long> cartIds, Long memberId) {
+        return queryFactory
+                .selectFrom(cart)
+                .join(cart.product, product).fetchJoin()
+                .join(cart.productOption, productOption).fetchJoin()
+                .where(cart.id.in(cartIds)
                         .and(cart.member.id.eq(memberId)))
-                .execute();
+                .fetch();
     }
 
     @Transactional
-    public void bulkDelete(List<Long> cartIdList, Long memberId) {
-        queryFactory
+    public void delete(Long cartId, Long memberId) {
+        long execute = queryFactory
                 .delete(cart)
-                .where(cart.id.in(cartIdList)
+                .where(cart.id.eq(cartId)
                         .and(cart.member.id.eq(memberId)))
                 .execute();
     }

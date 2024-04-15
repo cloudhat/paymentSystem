@@ -52,7 +52,7 @@ public class OrderService {
 
     public OrderResponse getOrderResponse(UserPrincipal userPrincipal, String idempotencyKey) {
         Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(AuthenticationException::new);
-        Orders orders = orderRepository.findOrdersByIdempotencyKey(idempotencyKey, member.getId()).orElseThrow(EntityNotFoundException::new);
+        Orders orders = orderRepository.findByIdempotencyKey(idempotencyKey, member.getId()).orElseThrow(EntityNotFoundException::new);
 
 
         return OrderResponse.fromEntity(orders, orders.getOrderProducts(), orders.getOrderCarts());

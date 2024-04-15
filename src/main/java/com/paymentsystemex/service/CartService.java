@@ -62,7 +62,7 @@ public class CartService {
                 .collect(Collectors.toList());
     }
 
-    private List<Cart> getAvailableCarts(Long memberId) {
+    public List<Cart> getAvailableCarts(Long memberId) {
         return cartRepository.findByMemberId(memberId).stream()
                 .filter(cart -> cart.getProductOption().isCurrentlyAvailable())
                 .collect(Collectors.toList());

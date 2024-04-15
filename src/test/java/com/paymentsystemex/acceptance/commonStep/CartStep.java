@@ -12,10 +12,6 @@ import java.util.Map;
 public class CartStep {
 
     public static ExtractableResponse<Response> 장바구니_생성(String accessToken, Long productId, Long productOptionId, int quantity) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("productId", productId);
-        params.put("productOptionId", productOptionId);
-        params.put("quantity", quantity);
 
         ExtractableResponse<Response> response =
                 RestAssured.given().log().all()
