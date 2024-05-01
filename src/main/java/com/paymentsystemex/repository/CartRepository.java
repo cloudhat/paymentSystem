@@ -35,21 +35,21 @@ public class CartRepository {
                 .fetch();
     }
 
-    public List<Cart> findByCartIds(List<Long> cartIds, Long memberId) {
-        return queryFactory
-                .selectFrom(cart)
-                .join(cart.product, product).fetchJoin()
-                .join(cart.productOption, productOption).fetchJoin()
-                .where(cart.id.in(cartIds)
-                        .and(cart.member.id.eq(memberId)))
-                .fetch();
-    }
 
     @Transactional
     public void delete(Long cartId, Long memberId) {
-        long execute = queryFactory
+        queryFactory
                 .delete(cart)
                 .where(cart.id.eq(cartId)
+                        .and(cart.member.id.eq(memberId)))
+                .execute();
+    }
+
+    @Transactional
+    public void bulkDelete(List<Long> cartIdList, Long memberId) {
+        queryFactory
+                .delete(cart)
+                .where(cart.id.in(cartIdList)
                         .and(cart.member.id.eq(memberId)))
                 .execute();
     }
