@@ -22,6 +22,9 @@ public class Address {
     private Member member;
 
     @Column
+    private String addressDetail;
+
+    @Column
     private boolean isDefault;
 
     @Enumerated(EnumType.STRING)

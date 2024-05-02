@@ -3,13 +3,13 @@ package com.paymentsystemex.domain.payment;
 
 import com.paymentsystemex.domain.member.Member;
 import com.paymentsystemex.domain.order.Orders;
-import com.paymentsystemex.domain.payment.PaymentMethod;
-import com.paymentsystemex.domain.payment.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,9 +36,22 @@ public class Payment {
     @Column
     private String eventType;
 
+    @Column
+    private LocalDateTime expireTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Orders orders;
+
+    @Column
+    private String payKey;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    @Column
+    private String transactionId;
 
     public Payment(int totalPayAmount, int totalDiscountAmount, PaymentMethod paymentMethod, String eventType, Orders orders, Member member) {
         this.totalPayAmount = totalPayAmount;
@@ -48,13 +61,31 @@ public class Payment {
         this.eventType = eventType;
         this.orders = orders;
         this.member = member;
+        this.expireTime = LocalDateTime.now().plusMinutes(30);
         this.orders.getPayments().add(this);
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    public void changeStatusToStart(String payKey) {
 
-    @Column
-    private String transactionId;
+        if(expireTime.isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("Payment expired");
+        }
+
+        if (!this.paymentStatus.equals(PaymentStatus.BEFORE_PAYMENT) && !this.paymentStatus.equals(PaymentStatus.FAIL)) {
+            throw new IllegalArgumentException("Invalid payment status for starting: " + this.paymentStatus);
+        }
+
+        this.paymentStatus = PaymentStatus.STARTED;
+        this.payKey = payKey;
+    }
+
+    public void changeStatusToComplete() {
+
+        if (!this.paymentStatus.equals(PaymentStatus.STARTED)) {
+            throw new IllegalArgumentException("Invalid payment status for complete: " + this.paymentStatus);
+        }
+
+        this.paymentStatus = PaymentStatus.COMPLETE;
+        this.orders.changeStatusToComplete();
+    }
 }

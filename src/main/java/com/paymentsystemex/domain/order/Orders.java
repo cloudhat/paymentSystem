@@ -27,6 +27,9 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    @Column
+    private String addressDetail;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -63,5 +66,13 @@ public class Orders {
         } else {
             return firstProductName + " 외 " + remainingCount + "건";
         }
+    }
+
+    public void changeStatusToComplete(){
+        this.orderStatus = OrderStatus.ORDER_COMPLETE;
+    }
+
+    public void setAddressDetail(String addressDetail){
+        this.addressDetail = addressDetail;
     }
 }

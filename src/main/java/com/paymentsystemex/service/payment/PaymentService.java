@@ -2,15 +2,20 @@ package com.paymentsystemex.service.payment;
 
 import com.paymentsystemex.auth.AuthenticationException;
 import com.paymentsystemex.auth.principal.UserPrincipal;
-import com.paymentsystemex.domain.payment.Payment;
 import com.paymentsystemex.domain.member.Member;
 import com.paymentsystemex.domain.order.OrderProduct;
+import com.paymentsystemex.domain.order.OrderStatus;
 import com.paymentsystemex.domain.order.Orders;
+import com.paymentsystemex.domain.payment.Payment;
+import com.paymentsystemex.domain.payment.PaymentMethod;
+import com.paymentsystemex.dto.payment.PaymentInitResponse;
 import com.paymentsystemex.dto.payment.PaymentRequest;
-import com.paymentsystemex.dto.payment.PaymentResponse;
 import com.paymentsystemex.repository.MemberRepository;
 import com.paymentsystemex.repository.OrderRepository;
+import com.paymentsystemex.service.DeadLetterQueueService;
 import com.paymentsystemex.service.ProductService;
+import com.paymentsystemex.service.payment.payService.PayService;
+import com.paymentsystemex.service.payment.payService.PayServiceFactory;
 import com.paymentsystemex.service.payment.paymentInitStrategy.PaymentInitStrategy;
 import com.paymentsystemex.service.payment.paymentInitStrategy.PaymentInitStrategyFactory;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,18 +30,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PaymentService {
 
+    private final PaymentInitStrategyFactory paymentInitStrategyFactory;
+    private final PayServiceFactory payServiceFactory;
+
     private final ProductService productService;
     private final MemberRepository memberRepository;
-    private final PaymentInitStrategyFactory paymentInitStrategyFactory;
     private final OrderRepository orderRepository;
-
+    private final DeadLetterQueueService deadLetterQueueService;
 
     @Transactional
-    public PaymentResponse initPayment(PaymentRequest paymentRequest, UserPrincipal userPrincipal) {
+    public PaymentInitResponse initPayment(PaymentRequest paymentRequest, UserPrincipal userPrincipal) {
 
         Member member = memberRepository.findByEmail(userPrincipal.getUsername()).orElseThrow(AuthenticationException::new);
         Orders orders = orderRepository.findOrdersByIdempotencyKey(paymentRequest.getIdempotencyKey(), member.getId()).orElseThrow(EntityNotFoundException::new);
 
+        if (!orders.getOrderStatus().equals(OrderStatus.BEFORE_PAYMENT)) {
+            throw new IllegalArgumentException("Init payment is not available");
+        }
 
         tryUpdateQuantityTwice(orders.getOrderProducts());
 
@@ -44,10 +54,10 @@ public class PaymentService {
 
         try {
             Payment payment = paymentInitStrategy.getPayment(paymentRequest, member, orders);
-            return new PaymentResponse(payment.getId(), orders.getOrderProductSummary(), payment.getTotalPayAmount(), userPrincipal.getUsername());
+            return new PaymentInitResponse(payment.getId(), orders.getOrderProductSummary(), payment.getTotalPayAmount(), userPrincipal.getUsername());
 
         } catch (Exception exception) {
-            deadLetterQueue(orders.getOrderProducts());
+            deadLetterQueueService.enqueue(orders.getOrderProducts());
             throw exception;
         }
     }
@@ -60,9 +70,26 @@ public class PaymentService {
         }
     }
 
-    public void deadLetterQueue(List<OrderProduct> orderProductList) {
-        //큐에 주문상품을 넣어 비동기로 재고 복구
+    @Transactional
+    public Payment initTransaction(Long paymentId, Long memberId, String paykey) {
+        Payment payment = orderRepository.findPaymentById(paymentId, memberId).orElseThrow(EntityNotFoundException::new);
+        payment.changeStatusToStart(paykey);
+
+        return payment;
     }
+
+    public void requestTransaction(PaymentMethod paymentMethod, Long paymentId, String payKey, int totalPayAmount) throws Exception{
+        PayService payService = payServiceFactory.getPayService(paymentMethod);
+        payService.requestTransaction(paymentId, payKey, totalPayAmount);
+    }
+
+    @Transactional
+    public void completeTransaction(Long paymentId , Long memberId){
+        Payment payment = orderRepository.findPaymentById(paymentId, memberId).orElseThrow(EntityNotFoundException::new);
+        payment.changeStatusToComplete();
+
+    }
+
 
 
 }

@@ -9,6 +9,6 @@ public interface PayService {
     PaymentMethod getPaymentMethod();
 
 
-    void requestTransaction();
+    void requestTransaction(Long paymentId, String payKey, int totalPayAmount) throws Exception;
 
 }

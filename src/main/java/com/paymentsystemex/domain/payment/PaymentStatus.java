@@ -1,8 +1,14 @@
 package com.paymentsystemex.domain.payment;
 
+import lombok.Getter;
+
+@Getter
 public enum PaymentStatus {
     BEFORE_PAYMENT,
-    PAYMENT_STARTED,
-    PAYMENT_COMPLETE,
-    CANCEL_COMPLETE
+    STARTED,
+    FAIL,
+    COMPLETE,
+    CANCEL,
+    PARTIAL_REFUND,
+    REFUND;
 }

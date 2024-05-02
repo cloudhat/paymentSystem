@@ -14,16 +14,21 @@ import com.paymentsystemex.domain.payment.PaymentMethod;
 import com.paymentsystemex.domain.product.Product;
 import com.paymentsystemex.domain.product.ProductOption;
 import com.paymentsystemex.dto.payment.PaymentRequest;
-import com.paymentsystemex.dto.payment.PaymentResponse;
+import com.paymentsystemex.dto.payment.PaymentInitResponse;
+import com.paymentsystemex.dto.payment.PaymentTransactionResponse;
+import com.paymentsystemex.mock.PayTestController;
 import com.paymentsystemex.repository.CouponRepository;
 import com.paymentsystemex.repository.MemberRepository;
 import com.paymentsystemex.repository.OrderRepository;
 import com.paymentsystemex.repository.ProductRepository;
 import com.paymentsystemex.utils.AcceptanceTest;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -63,6 +68,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
     private Coupon fixedCoupon;
     private Coupon rateCoupon;
 
+    private String payKey = PayTestController.PAY_KEY;
     @BeforeEach
     public void setGivenDataForOrder() {
 
@@ -87,8 +93,8 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
 
         Member member = memberRepository.findByEmail(EMAIL).get();
 
-        addressIdMetro = memberRepository.save(new Address(null, member, true, DeliveryCharge.METROPOLITAN_AREA)).getId();
-        addressIdJeju = memberRepository.save(new Address(null, member, true, DeliveryCharge.JEJU)).getId();
+        addressIdMetro = memberRepository.save(new Address(null, member,"서울시 동작구 ...", true, DeliveryCharge.METROPOLITAN_AREA)).getId();
+        addressIdJeju = memberRepository.save(new Address(null, member, "제주특별자치도 제주시 ...",true, DeliveryCharge.JEJU)).getId();
 
         Coupon fixedCoupon = Coupon.builder()
                 .member(member)
@@ -127,11 +133,11 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
         PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", new ArrayList<>(), addressIdMetro);
 
         //when
-        PaymentResponse paymentResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentResponse.class);
+        PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
 
         //then
         int expectedTotalPayAmount = PRODUCT1_PRICE * PRODUCT1_ORDER_QUANTITY + PRODUCT2_PRICE * PRODUCT2_ORDER_QUANTITY + DeliveryCharge.METROPOLITAN_AREA.getAmount();
-        assertThat(paymentResponse.getTotalPayAmount()).isEqualTo(expectedTotalPayAmount);
+        assertThat(paymentInitResponse.getTotalPayAmount()).isEqualTo(expectedTotalPayAmount);
 
     }
 
@@ -142,11 +148,11 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
         PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
 
         //when
-        PaymentResponse paymentResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentResponse.class);
+        PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
 
         //then
         int expectedTotalPayAmount = PRODUCT1_PRICE * PRODUCT1_ORDER_QUANTITY + PRODUCT2_PRICE * PRODUCT2_ORDER_QUANTITY + DeliveryCharge.JEJU.getAmount();
-        assertThat(paymentResponse.getTotalPayAmount()).isEqualTo(expectedTotalPayAmount);
+        assertThat(paymentInitResponse.getTotalPayAmount()).isEqualTo(expectedTotalPayAmount);
 
     }
 
@@ -157,13 +163,13 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
         PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", Arrays.asList(fixedCoupon.getId()), addressIdJeju);
 
         //when
-        PaymentResponse paymentResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentResponse.class);
-        Payment payment = orderRepository.findPaymentById(paymentResponse.getPaymentId(), memberId).get();
+        PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
+        Payment payment = orderRepository.findPaymentById(paymentInitResponse.getPaymentId(), memberId).get();
 
         //then
         int productPriceSum = PRODUCT1_PRICE * PRODUCT1_ORDER_QUANTITY + PRODUCT2_PRICE * PRODUCT2_ORDER_QUANTITY;
         int expectedTotalPayAmount = productPriceSum - fixedCoupon.getDiscountAmount(productPriceSum) + DeliveryCharge.JEJU.getAmount();
-        assertThat(paymentResponse.getTotalPayAmount()).isEqualTo(expectedTotalPayAmount);
+        assertThat(paymentInitResponse.getTotalPayAmount()).isEqualTo(expectedTotalPayAmount);
         assertThat(payment.getTotalDiscountAmount()).isEqualTo(-fixedCoupon.getDiscountAmount(productPriceSum));
     }
 
@@ -174,15 +180,15 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
         PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", Arrays.asList(rateCoupon.getId(), fixedCoupon.getId()), addressIdJeju);
 
         //when
-        PaymentResponse paymentResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentResponse.class);
-        Payment payment = orderRepository.findPaymentById(paymentResponse.getPaymentId(), memberId).get();
+        PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
+        Payment payment = orderRepository.findPaymentById(paymentInitResponse.getPaymentId(), memberId).get();
 
         //then
         int productPriceSum = PRODUCT1_PRICE * PRODUCT1_ORDER_QUANTITY + PRODUCT2_PRICE * PRODUCT2_ORDER_QUANTITY;
         int fixedDiscountedAmount = fixedCoupon.getDiscountAmount(productPriceSum);
         int rateDiscountAmount = rateCoupon.getDiscountAmount(productPriceSum - fixedDiscountedAmount);
         int expectedTotalPayAmount = productPriceSum - fixedDiscountedAmount - rateDiscountAmount + DeliveryCharge.JEJU.getAmount();
-        assertThat(paymentResponse.getTotalPayAmount()).isEqualTo(expectedTotalPayAmount);
+        assertThat(paymentInitResponse.getTotalPayAmount()).isEqualTo(expectedTotalPayAmount);
         assertThat(payment.getTotalDiscountAmount()).isEqualTo(-fixedDiscountedAmount - rateDiscountAmount);
 
     }
@@ -194,13 +200,91 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
         PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.NAVER_PAY, "NAVER_PAY", Arrays.asList(rateCoupon.getId(), fixedCoupon.getId()), addressIdJeju);
 
         //when
-        PaymentResponse paymentResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentResponse.class);
+        PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
 
         //then
         int productPriceSum = PRODUCT1_PRICE * PRODUCT1_ORDER_QUANTITY + PRODUCT2_PRICE * PRODUCT2_ORDER_QUANTITY;
         int eventDiscountAmount = 2000;
         int expectedTotalPayAmount = productPriceSum - eventDiscountAmount + DeliveryCharge.JEJU.getAmount();
-        assertThat(paymentResponse.getTotalPayAmount()).isEqualTo(expectedTotalPayAmount);
+        assertThat(paymentInitResponse.getTotalPayAmount()).isEqualTo(expectedTotalPayAmount);
+    }
+
+    @DisplayName("토스페이 결제 정상 시나리오 진행")
+    @Test
+    public void TossPayTransactionRequest(){
+        //given
+        PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
+        PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
+
+        //when
+        ExtractableResponse<Response> response = PaymentStep.결제_진행(accessToken, paymentInitResponse.getPaymentId(), payKey);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @DisplayName("토스페이 잘못된 payKey 진행")
+    @Test
+    public void invalidTossPayKeyTransactionRequest(){
+        //given
+        PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
+        PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
+
+        //when
+        ExtractableResponse<Response> response = PaymentStep.결제_진행(accessToken, paymentInitResponse.getPaymentId(), payKey+"!");
+        PaymentTransactionResponse paymentTransactionResponse = response.jsonPath().getObject("", PaymentTransactionResponse.class);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        assertThat(paymentTransactionResponse.getReason()).isEqualTo(PayTestController.FAULURE_MSG);
+
+    }
+
+    @DisplayName("네이버페이 결제 정상 시나리오 진행")
+    @Test
+    public void NaverPayTransactionRequest(){
+        //given
+        PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.NAVER_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
+        PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
+
+        //when
+        ExtractableResponse<Response> response = PaymentStep.결제_진행(accessToken, paymentInitResponse.getPaymentId(), payKey);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @DisplayName("네이버페이 금액이 다른 결제 시나리오 진행")
+    @Test
+    public void invalidNaverPayKeyTransactionRequest1(){
+        //given
+        PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.NAVER_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
+        PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
+
+        //when
+        ExtractableResponse<Response> response = PaymentStep.결제_진행(accessToken, paymentInitResponse.getPaymentId(), PayTestController.INVALID_PAY_KEY);
+        PaymentTransactionResponse paymentTransactionResponse = response.jsonPath().getObject("", PaymentTransactionResponse.class);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        assertThat(paymentTransactionResponse.getReason()).isEqualTo("결제금액이 상이합니다.");
+    }
+
+    @DisplayName("네이버페이 존재하지 않는 payKey 시나리오")
+    @Test
+    public void invalidNaverPayKeyTransactionRequest2(){
+        //given
+        PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.NAVER_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
+        PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
+
+        //when
+        ExtractableResponse<Response> response = PaymentStep.결제_진행(accessToken, paymentInitResponse.getPaymentId(), payKey+"!");
+        PaymentTransactionResponse paymentTransactionResponse = response.jsonPath().getObject("", PaymentTransactionResponse.class);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        assertThat(paymentTransactionResponse.getReason()).isEqualTo(PayTestController.FAULURE_MSG);
+
     }
 
 

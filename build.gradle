@@ -50,6 +50,8 @@ dependencies {
     implementation group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0.1'
 	implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.1'
 
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
     //Querydsl 추가
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"

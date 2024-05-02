@@ -1,5 +1,6 @@
 package com.paymentsystemex.unit;
 
+import com.paymentsystemex.domain.order.DeliveryStatus;
 import com.paymentsystemex.domain.order.OrderProduct;
 import com.paymentsystemex.domain.product.ProductOption;
 import com.paymentsystemex.repository.ProductRepository;
@@ -49,8 +50,8 @@ public class ProductServiceTest extends AcceptanceTest {
         productOption1Id = productRepository.saveProductOption(productOption1).getId();
         productOption2Id = productRepository.saveProductOption(productOption2).getId();
 
-        orderProduct1 = new OrderProduct(null, "상품1", "상품옵션1", 1, 10000, null, null, productOption1);
-        orderProduct2 = new OrderProduct(null, "상품1", "상품옵션1", 1, 10000, null, null, productOption2);
+        orderProduct1 = new OrderProduct(null, "상품1", "상품옵션1", 1, 10000, null, null, productOption1 , DeliveryStatus.BEFORE_STARTED , null);
+        orderProduct2 = new OrderProduct(null, "상품1", "상품옵션1", 1, 10000, null, null, productOption2, DeliveryStatus.BEFORE_STARTED , null);
     }
 
     @DisplayName("상품 단건 수량 변경")

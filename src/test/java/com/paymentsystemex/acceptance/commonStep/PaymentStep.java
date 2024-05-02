@@ -20,4 +20,16 @@ public class PaymentStep {
 
         return response;
     }
+
+    public static ExtractableResponse<Response> 결제_진행(String accessToken, Long paymentId, String payKey) {
+        ExtractableResponse<Response> response =
+                RestAssured.given().log().all()
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .header("Authorization", "Bearer " + accessToken)
+                        .when().post("/payments/transaction?paymentId=" + paymentId + "&payKey=" + payKey)
+                        .then().log().all()
+                        .extract();
+
+        return response;
+    }
 }

@@ -18,6 +18,7 @@ public class DeliveryFeePolicy extends PricePolicy {
     @Override
     public List<OrderPriceHistory> getOrderPriceHistory(int price, Orders orders) {
         OrderPriceHistory orderPriceHistory = new OrderPriceHistory(orders, PriceType.DELIVERY_FEE, "배송비", address.getDeliveryCharge().getAmount());
+        orders.setAddressDetail(address.getAddressDetail());
         return List.of(orderPriceHistory);
     }
 }

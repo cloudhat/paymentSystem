@@ -39,12 +39,16 @@ public class OrderProduct {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
-
+ 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productOption_id", nullable = false)
     private ProductOption productOption;
 
+    @Column
+    private DeliveryStatus deliveryStatus;
 
+    @Column
+    private String invoiceNum;
 
     public OrderProduct(Orders orders, Cart cart) {
 
@@ -56,7 +60,7 @@ public class OrderProduct {
         this.orders = orders;
         this.product = cart.getProduct();
         this.productOption = cart.getProductOption();
-
+        this.deliveryStatus = DeliveryStatus.BEFORE_STARTED;
         orders.getOrderProducts().add(this);
     }
 }

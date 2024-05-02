@@ -39,7 +39,7 @@ public class OrderService {
         }
 
         Orders orders = new Orders(UUID.randomUUID().toString(), member);
-        orderRepository.save(orders);
+        orderRepository.saveOrders(orders);
 
         List<OrderProduct> orderProducts = carts.stream()
                 .map(cart -> new OrderProduct(orders, cart)).toList();
