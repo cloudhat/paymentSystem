@@ -1,5 +1,5 @@
 <h1>이커머스 결제 서비스를 구현한 토이프로젝트</h1>
-<p><a href="https://cloudhat-passion.notion.site/24-05-ca8474d5f918430da2c76ea3df423fc3?pvs=25">상세설명 링크</a></p>
+<p><a href="https://cloudhat.github.io/posts/payment-system/">상세설명 링크</a></p>
     <h2>아래 6단계로 이루어진 이커머스 결제 서비스를 구현한 토이프로젝트입니다.</h2>
     <ol>
         <li>회원 가입 및 로그인</li>
