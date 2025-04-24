@@ -1,15 +1,15 @@
 package com.paymentsystemex.unit;
 
 import com.paymentsystemex.domain.member.entity.Member;
+import com.paymentsystemex.domain.member.repository.MemberRepository;
 import com.paymentsystemex.domain.order.entity.OrderStatus;
 import com.paymentsystemex.domain.order.entity.Orders;
+import com.paymentsystemex.domain.order.repository.OrderRepository;
 import com.paymentsystemex.domain.payment.entity.Payment;
 import com.paymentsystemex.domain.payment.entity.PaymentStatus;
-import com.paymentsystemex.domain.member.repository.MemberRepository;
-import com.paymentsystemex.domain.order.repository.OrderRepository;
 import com.paymentsystemex.domain.payment.repository.PaymentRepository;
 import com.paymentsystemex.domain.payment.service.PaymentService;
-import com.paymentsystemex.utils.AcceptanceTest;
+import com.paymentsystemex.utils.JpaH2TestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-public class PaymentServiceTest extends AcceptanceTest {
+public class PaymentServiceTestBase extends JpaH2TestBase {
 
     @Autowired
     MemberRepository memberRepository;

@@ -1,11 +1,11 @@
 package com.paymentsystemex.unit;
 
 import com.paymentsystemex.domain.order.entity.OrderProduct;
+import com.paymentsystemex.domain.payment.service.PaymentService;
 import com.paymentsystemex.domain.product.entity.ProductOption;
 import com.paymentsystemex.domain.product.repository.ProductRepository;
 import com.paymentsystemex.domain.product.service.ProductService;
-import com.paymentsystemex.domain.payment.service.PaymentService;
-import com.paymentsystemex.utils.AcceptanceTest;
+import com.paymentsystemex.utils.JpaH2TestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-public class ProductServiceTest extends AcceptanceTest {
+public class ProductServiceTestBase extends JpaH2TestBase {
 
     @Autowired
     private ProductService productService;
