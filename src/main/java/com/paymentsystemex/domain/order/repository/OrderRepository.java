@@ -1,9 +1,7 @@
 package com.paymentsystemex.domain.order.repository;
 
-import com.paymentsystemex.domain.order.entity.Orders;
-import com.paymentsystemex.domain.payment.entity.Payment;
-import com.paymentsystemex.domain.payment.entity.PaymentStatus;
 import com.paymentsystemex.domain.order.dto.OrderHistoryRequest;
+import com.paymentsystemex.domain.order.entity.Orders;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -22,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.paymentsystemex.domain.order.entity.QOrders.orders;
-import static com.paymentsystemex.domain.payment.entity.QPayment.payment;
 
 @RequiredArgsConstructor
 @Repository
@@ -72,44 +69,8 @@ public class OrderRepository {
                 .orderBy(ordersOrderBy(search))
                 .fetch();
 
-
         return PageableExecutionUtils.getPage(content, pageRequest, countQuery::fetchCount);
 
-    }
-
-    @Transactional
-    public Payment savePayment(Payment payment) {
-        em.persist(payment);
-
-        return payment;
-    }
-
-    public Optional<Payment> findPaymentById(Long id, Long memberId) {
-        Payment result = queryFactory
-                .selectFrom(payment)
-                .where(payment.id.eq(id)
-                        .and(payment.member.id.eq(memberId)))
-                .fetchOne();
-
-        return Optional.of(result);
-    }
-
-    @Transactional
-    public void updatePaymentStatus(Long paymentId, PaymentStatus paymentStatus) {
-        queryFactory
-                .update(payment)
-                .set(payment.paymentStatus, paymentStatus)
-                .where(payment.id.eq(paymentId))
-                .execute();
-    }
-
-    public Optional<Payment> findPaymentByPaykey(String payKey) {
-        Payment result = queryFactory
-                .selectFrom(payment)
-                .where(payment.payKey.eq(payKey))
-                .fetchOne();
-
-        return Optional.of(result);
     }
 
     private BooleanExpression betweenOrdersCreateAt(OrderHistoryRequest search) {

@@ -1,17 +1,17 @@
 package com.paymentsystemex.domain.payment.controller;
 
-import com.paymentsystemex.global.auth.AuthenticationException;
-import com.paymentsystemex.global.auth.principal.AuthenticationPrincipal;
-import com.paymentsystemex.global.auth.principal.UserPrincipal;
 import com.paymentsystemex.domain.member.entity.Member;
-import com.paymentsystemex.domain.payment.entity.Payment;
-import com.paymentsystemex.domain.payment.entity.PaymentStatus;
+import com.paymentsystemex.domain.member.repository.MemberRepository;
 import com.paymentsystemex.domain.payment.dto.PaymentInitResponse;
 import com.paymentsystemex.domain.payment.dto.PaymentRequest;
 import com.paymentsystemex.domain.payment.dto.PaymentTransactionResponse;
-import com.paymentsystemex.domain.member.repository.MemberRepository;
-import com.paymentsystemex.domain.order.repository.OrderRepository;
+import com.paymentsystemex.domain.payment.entity.Payment;
+import com.paymentsystemex.domain.payment.entity.PaymentStatus;
+import com.paymentsystemex.domain.payment.repository.PaymentRepository;
 import com.paymentsystemex.domain.payment.service.PaymentService;
+import com.paymentsystemex.global.auth.AuthenticationException;
+import com.paymentsystemex.global.auth.principal.AuthenticationPrincipal;
+import com.paymentsystemex.global.auth.principal.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,8 @@ public class PaymentController {
 
     private final MemberRepository memberRepository;
 
-    private final OrderRepository orderRepository;
+    private final PaymentRepository paymentRepository;
+
 
     @PostMapping("/init")
     public ResponseEntity<PaymentInitResponse> initPayment(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PaymentRequest paymentRequest) {
@@ -46,7 +47,7 @@ public class PaymentController {
         try {
             paymentService.requestTransaction(payment.getPaymentMethod(), paymentId, payKey, payment.getTotalPayAmount());
         } catch (Exception e) {
-            orderRepository.updatePaymentStatus(paymentId, PaymentStatus.FAIL);
+            paymentRepository.updatePaymentStatus(paymentId, PaymentStatus.FAIL);
             PaymentTransactionResponse paymentTransactionResponse = new PaymentTransactionResponse(e.getMessage(), payment.getExpireTime(), PaymentStatus.FAIL);
             return ResponseEntity.internalServerError().body(paymentTransactionResponse);
         }

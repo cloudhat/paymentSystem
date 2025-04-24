@@ -7,6 +7,7 @@ import com.paymentsystemex.domain.payment.entity.Payment;
 import com.paymentsystemex.domain.payment.entity.PaymentStatus;
 import com.paymentsystemex.domain.member.repository.MemberRepository;
 import com.paymentsystemex.domain.order.repository.OrderRepository;
+import com.paymentsystemex.domain.payment.repository.PaymentRepository;
 import com.paymentsystemex.domain.payment.service.PaymentService;
 import com.paymentsystemex.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,9 @@ public class PaymentServiceTest extends AcceptanceTest {
     OrderRepository orderRepository;
 
     @Autowired
+    PaymentRepository paymentRepository;
+
+    @Autowired
     PaymentService paymentService;
 
     private Member member;
@@ -46,13 +50,13 @@ public class PaymentServiceTest extends AcceptanceTest {
         orderRepository.saveOrders(orders);
 
         validPayment = new Payment(0, 0, null, null, orders, member);
-        orderRepository.savePayment(validPayment);
+        paymentRepository.savePayment(validPayment);
 
         expiredPayment = new Payment(0, 0, null, null, orders, member);
         Field expireTimeField = Payment.class.getDeclaredField("expireTime");
         expireTimeField.setAccessible(true);
         expireTimeField.set(expiredPayment, LocalDateTime.now().minusMinutes(30));
-        orderRepository.savePayment(expiredPayment);
+        paymentRepository.savePayment(expiredPayment);
     }
 
     @DisplayName("정상적인 절차로 결제상태를 변경한다")
@@ -60,12 +64,12 @@ public class PaymentServiceTest extends AcceptanceTest {
     public void validTransaction() {
         //when
         paymentService.initTransaction(validPayment.getId(), member.getId(), "payKeyExam");
-        orderRepository.updatePaymentStatus(validPayment.getId(), PaymentStatus.FAIL);
+        paymentRepository.updatePaymentStatus(validPayment.getId(), PaymentStatus.FAIL);
         paymentService.initTransaction(validPayment.getId(), member.getId(), "payKeyExam");
         paymentService.completeTransaction(validPayment.getId(), member.getId());
 
         //then
-        Payment payment = orderRepository.findPaymentById(validPayment.getId(), member.getId()).get();
+        Payment payment = paymentRepository.findPaymentById(validPayment.getId(), member.getId()).get();
         Orders orders = orderRepository.findOrdersByIdempotencyKey(idempotencyKey, member.getId()).get();
         assertThat(payment.getPaymentStatus()).isEqualTo(PaymentStatus.COMPLETE);
         assertThat(orders.getOrderStatus()).isEqualTo(OrderStatus.ORDER_COMPLETE);

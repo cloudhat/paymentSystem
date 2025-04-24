@@ -1,7 +1,7 @@
 package com.paymentsystemex.mock;
 
 import com.paymentsystemex.domain.payment.entity.Payment;
-import com.paymentsystemex.domain.order.repository.OrderRepository;
+import com.paymentsystemex.domain.payment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class PayTestController {
     public final static String INVALID_PAY_KEY = "invalidPaymentKey";
     public final static String FAULURE_MSG = "잘못된 요청입니다.";
 
-    private final OrderRepository orderRepository;
+    private final PaymentRepository paymentRepository;
 
     @PostMapping("/v1/payments/confirm")
     public ResponseEntity<JSONObject> tossConfirm(@RequestBody JSONObject jsonObject) {
@@ -61,7 +61,7 @@ public class PayTestController {
 
 
         if (payKey.equals(PAY_KEY)) {
-            Payment payment = orderRepository.findPaymentByPaykey(payKey).get();
+            Payment payment = paymentRepository.findPaymentByPaykey(payKey).get();
             result.put("code", "Success");
 
             JSONObject detail = new JSONObject();
@@ -90,7 +90,7 @@ public class PayTestController {
 
 
         if (payKey.equals(PAY_KEY)) {
-            Payment payment = orderRepository.findPaymentByPaykey(payKey).get();
+            Payment payment = paymentRepository.findPaymentByPaykey(payKey).get();
             result.put("code", "Success");
 
             JSONObject detail = new JSONObject();

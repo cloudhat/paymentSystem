@@ -1,5 +1,6 @@
 package com.paymentsystemex.domain.payment.service;
 
+import com.paymentsystemex.domain.payment.repository.PaymentRepository;
 import com.paymentsystemex.global.auth.AuthenticationException;
 import com.paymentsystemex.global.auth.principal.UserPrincipal;
 import com.paymentsystemex.domain.member.entity.Member;
@@ -38,6 +39,7 @@ public class PaymentService {
     private final ProductService productService;
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
+    private final PaymentRepository paymentRepository;
     private final DeadLetterQueueService deadLetterQueueService;
 
     @Transactional
@@ -79,7 +81,7 @@ public class PaymentService {
 
     @Transactional
     public Payment initTransaction(Long paymentId, Long memberId, String paykey) {
-        Payment payment = orderRepository.findPaymentById(paymentId, memberId).orElseThrow(EntityNotFoundException::new);
+        Payment payment = paymentRepository.findPaymentById(paymentId, memberId).orElseThrow(EntityNotFoundException::new);
         payment.changeStatusToStart(paykey);
 
         return payment;
@@ -94,7 +96,7 @@ public class PaymentService {
     public void completeTransaction(Long paymentId, Long memberId) {
 
         try{
-            Payment payment = orderRepository.findPaymentById(paymentId, memberId).orElseThrow(EntityNotFoundException::new);
+            Payment payment = paymentRepository.findPaymentById(paymentId, memberId).orElseThrow(EntityNotFoundException::new);
             payment.changeStatusToComplete();
         }catch (Exception e){
             deadLetterQueueService.enqueue(paymentId);
