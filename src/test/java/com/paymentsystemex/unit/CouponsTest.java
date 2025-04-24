@@ -1,12 +1,11 @@
 package com.paymentsystemex.unit;
 
-import com.paymentsystemex.domain.coupon.Coupon;
-import com.paymentsystemex.domain.coupon.CouponType;
-import com.paymentsystemex.domain.coupon.Coupons;
-import com.paymentsystemex.domain.member.Member;
-import com.paymentsystemex.domain.order.OrderPriceHistory;
-import com.paymentsystemex.domain.order.Orders;
-import org.checkerframework.checker.units.qual.C;
+import com.paymentsystemex.domain.coupon.entity.Coupon;
+import com.paymentsystemex.domain.coupon.entity.CouponType;
+import com.paymentsystemex.domain.coupon.entity.Coupons;
+import com.paymentsystemex.domain.member.entity.Member;
+import com.paymentsystemex.domain.order.entity.OrderPriceHistory;
+import com.paymentsystemex.domain.order.entity.Orders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

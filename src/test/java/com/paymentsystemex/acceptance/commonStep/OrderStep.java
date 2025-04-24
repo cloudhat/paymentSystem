@@ -1,7 +1,7 @@
 package com.paymentsystemex.acceptance.commonStep;
 
-import com.paymentsystemex.dto.order.OrderHistoryRequest;
-import com.paymentsystemex.dto.order.OrderRequest;
+import com.paymentsystemex.domain.order.dto.OrderHistoryRequest;
+import com.paymentsystemex.domain.order.dto.OrderRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

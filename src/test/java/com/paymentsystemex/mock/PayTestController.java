@@ -1,14 +1,12 @@
 package com.paymentsystemex.mock;
 
-import com.paymentsystemex.domain.payment.Payment;
-import com.paymentsystemex.repository.OrderRepository;
+import com.paymentsystemex.domain.payment.entity.Payment;
+import com.paymentsystemex.domain.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor

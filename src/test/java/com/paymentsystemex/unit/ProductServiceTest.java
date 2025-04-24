@@ -1,10 +1,10 @@
 package com.paymentsystemex.unit;
 
-import com.paymentsystemex.domain.order.OrderProduct;
-import com.paymentsystemex.domain.product.ProductOption;
-import com.paymentsystemex.repository.ProductRepository;
-import com.paymentsystemex.service.ProductService;
-import com.paymentsystemex.service.payment.PaymentService;
+import com.paymentsystemex.domain.order.entity.OrderProduct;
+import com.paymentsystemex.domain.product.entity.ProductOption;
+import com.paymentsystemex.domain.product.repository.ProductRepository;
+import com.paymentsystemex.domain.product.service.ProductService;
+import com.paymentsystemex.domain.payment.service.PaymentService;
 import com.paymentsystemex.utils.AcceptanceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

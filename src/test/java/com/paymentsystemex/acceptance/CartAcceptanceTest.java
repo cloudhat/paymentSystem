@@ -2,10 +2,10 @@ package com.paymentsystemex.acceptance;
 
 import com.paymentsystemex.acceptance.commonStep.CartStep;
 import com.paymentsystemex.acceptance.commonStep.MemberSteps;
-import com.paymentsystemex.domain.product.Product;
-import com.paymentsystemex.domain.product.ProductOption;
-import com.paymentsystemex.dto.cart.CartResponse;
-import com.paymentsystemex.repository.ProductRepository;
+import com.paymentsystemex.domain.product.entity.Product;
+import com.paymentsystemex.domain.product.entity.ProductOption;
+import com.paymentsystemex.domain.cart.dto.CartResponse;
+import com.paymentsystemex.domain.product.repository.ProductRepository;
 import com.paymentsystemex.utils.AcceptanceTest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
