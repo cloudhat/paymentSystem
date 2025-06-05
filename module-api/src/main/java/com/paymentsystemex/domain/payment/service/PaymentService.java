@@ -52,7 +52,7 @@ public class PaymentService {
             throw new IllegalArgumentException("Init payment is not available");
         }
 
-        if(orders.getNormalPayment()!= null){
+        if (orders.getNormalPayment() != null) {
             Payment payment = orders.getNormalPayment();
             return new PaymentInitResponse(payment.getId(), orders.getOrderProductSummary(), payment.getTotalPayAmount(), userPrincipal.getUsername());
         }
@@ -95,10 +95,10 @@ public class PaymentService {
     @Transactional
     public void completeTransaction(Long paymentId, Long memberId) {
 
-        try{
+        try {
             Payment payment = paymentRepository.findPaymentById(paymentId, memberId).orElseThrow(EntityNotFoundException::new);
             payment.changeStatusToComplete();
-        }catch (Exception e){
+        } catch (Exception e) {
             deadLetterQueueService.enqueue(paymentId);
             throw e;
         }

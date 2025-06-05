@@ -1,1 +1,3 @@
 rootProject.name = 'paymentSystemEx'
+include 'module-api'
+
