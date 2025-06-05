@@ -1,6 +1,6 @@
 package com.paymentsystemex.domain.payment.service.payService;
 
-import com.paymentsystemex.domain.payment.entity.PaymentMethod;
+import core.domain.payment.entity.PaymentMethod;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

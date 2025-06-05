@@ -3,8 +3,8 @@ package com.paymentsystemex.domain.cart.controller;
 
 import com.paymentsystemex.global.auth.principal.AuthenticationPrincipal;
 import com.paymentsystemex.global.auth.principal.UserPrincipal;
-import com.paymentsystemex.domain.cart.dto.CartRequest;
-import com.paymentsystemex.domain.cart.dto.CartResponse;
+import core.domain.cart.dto.CartRequest;
+import core.domain.cart.dto.CartResponse;
 import com.paymentsystemex.domain.cart.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

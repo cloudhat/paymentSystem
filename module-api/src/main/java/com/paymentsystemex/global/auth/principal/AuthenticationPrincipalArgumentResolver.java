@@ -3,7 +3,7 @@ package com.paymentsystemex.global.auth.principal;
 
 import com.paymentsystemex.global.auth.AuthenticationException;
 import com.paymentsystemex.global.auth.token.JwtTokenProvider;
-import com.paymentsystemex.domain.member.repository.MemberRepository;
+import core.domain.member.repository.MemberRepository;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;

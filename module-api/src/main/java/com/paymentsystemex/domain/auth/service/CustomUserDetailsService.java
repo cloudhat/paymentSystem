@@ -4,9 +4,9 @@ package com.paymentsystemex.domain.auth.service;
 import com.paymentsystemex.global.auth.AuthenticationException;
 import com.paymentsystemex.global.auth.userdetails.UserDetails;
 import com.paymentsystemex.global.auth.userdetails.UserDetailsService;
-import com.paymentsystemex.domain.member.entity.CustomUserDetails;
-import com.paymentsystemex.domain.member.entity.Member;
-import com.paymentsystemex.domain.member.repository.MemberRepository;
+import com.paymentsystemex.global.auth.userdetails.CustomUserDetails;
+import core.domain.member.entity.Member;
+import core.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service

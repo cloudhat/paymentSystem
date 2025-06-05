@@ -1,6 +1,6 @@
 package com.paymentsystemex.domain.payment.service.payService;
 
-import com.paymentsystemex.domain.payment.entity.PaymentMethod;
+import core.domain.payment.entity.PaymentMethod;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

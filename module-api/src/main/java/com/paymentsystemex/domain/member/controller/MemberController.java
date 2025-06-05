@@ -1,8 +1,8 @@
 package com.paymentsystemex.domain.member.controller;
 
 
-import com.paymentsystemex.domain.member.dto.MemberRequest;
-import com.paymentsystemex.domain.member.dto.MemberResponse;
+import core.domain.member.dto.MemberRequest;
+import core.domain.member.dto.MemberResponse;
 import com.paymentsystemex.domain.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

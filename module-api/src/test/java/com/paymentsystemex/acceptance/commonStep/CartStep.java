@@ -1,6 +1,6 @@
 package com.paymentsystemex.acceptance.commonStep;
 
-import com.paymentsystemex.domain.cart.dto.CartRequest;
+import core.domain.cart.dto.CartRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

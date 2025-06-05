@@ -1,10 +1,10 @@
 package com.paymentsystemex.domain.member.service;
 
 
-import com.paymentsystemex.domain.member.entity.Member;
-import com.paymentsystemex.domain.member.dto.MemberRequest;
-import com.paymentsystemex.domain.member.dto.MemberResponse;
-import com.paymentsystemex.domain.member.repository.MemberRepository;
+import core.domain.member.entity.Member;
+import core.domain.member.dto.MemberRequest;
+import core.domain.member.dto.MemberResponse;
+import core.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,7 +1,7 @@
 package com.paymentsystemex.domain.payment.service.paymentInitStrategy.pricePolicy;
 
-import com.paymentsystemex.domain.order.entity.OrderPriceHistory;
-import com.paymentsystemex.domain.order.entity.Orders;
+import core.domain.order.entity.OrderPriceHistory;
+import core.domain.order.entity.Orders;
 
 import java.util.ArrayList;
 import java.util.List;

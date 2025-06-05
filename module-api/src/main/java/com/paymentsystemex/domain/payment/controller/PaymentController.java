@@ -1,13 +1,13 @@
 package com.paymentsystemex.domain.payment.controller;
 
-import com.paymentsystemex.domain.member.entity.Member;
-import com.paymentsystemex.domain.member.repository.MemberRepository;
-import com.paymentsystemex.domain.payment.dto.PaymentInitResponse;
-import com.paymentsystemex.domain.payment.dto.PaymentRequest;
-import com.paymentsystemex.domain.payment.dto.PaymentTransactionResponse;
-import com.paymentsystemex.domain.payment.entity.Payment;
-import com.paymentsystemex.domain.payment.entity.PaymentStatus;
-import com.paymentsystemex.domain.payment.repository.PaymentRepository;
+import core.domain.member.entity.Member;
+import core.domain.member.repository.MemberRepository;
+import core.domain.payment.dto.PaymentInitResponse;
+import core.domain.payment.dto.PaymentRequest;
+import core.domain.payment.dto.PaymentTransactionResponse;
+import core.domain.payment.entity.Payment;
+import core.domain.payment.entity.PaymentStatus;
+import core.domain.payment.repository.PaymentRepository;
 import com.paymentsystemex.domain.payment.service.PaymentService;
 import com.paymentsystemex.global.auth.AuthenticationException;
 import com.paymentsystemex.global.auth.principal.AuthenticationPrincipal;

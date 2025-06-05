@@ -1,9 +1,9 @@
 package com.paymentsystemex.unit;
 
-import com.paymentsystemex.domain.order.entity.OrderProduct;
+import core.domain.order.entity.OrderProduct;
 import com.paymentsystemex.domain.payment.service.PaymentService;
-import com.paymentsystemex.domain.product.entity.ProductOption;
-import com.paymentsystemex.domain.product.repository.ProductRepository;
+import core.domain.product.entity.ProductOption;
+import core.domain.product.repository.ProductRepository;
 import com.paymentsystemex.domain.product.service.ProductService;
 import com.paymentsystemex.utils.JpaH2TestBase;
 import org.junit.jupiter.api.BeforeEach;

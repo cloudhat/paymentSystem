@@ -1,8 +1,8 @@
 package com.paymentsystemex.domain.product.service;
 
-import com.paymentsystemex.domain.order.entity.OrderProduct;
-import com.paymentsystemex.domain.product.entity.ProductOption;
-import com.paymentsystemex.domain.product.repository.ProductRepository;
+import core.domain.order.entity.OrderProduct;
+import core.domain.product.entity.ProductOption;
+import core.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
