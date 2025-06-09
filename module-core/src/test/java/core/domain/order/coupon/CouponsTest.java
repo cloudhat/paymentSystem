@@ -1,4 +1,4 @@
-package com.paymentsystemex.unit;
+package core.domain.order.coupon;
 
 import core.domain.order.entity.coupon.Coupon;
 import core.domain.order.entity.coupon.CouponType;
