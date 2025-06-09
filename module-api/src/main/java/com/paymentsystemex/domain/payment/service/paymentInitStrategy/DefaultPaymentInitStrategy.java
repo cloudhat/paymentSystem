@@ -19,8 +19,6 @@ import com.paymentsystemex.domain.payment.service.paymentInitStrategy.pricePolic
 import com.paymentsystemex.domain.payment.service.paymentInitStrategy.pricePolicy.ProductPricePolicy;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -42,7 +40,6 @@ public class DefaultPaymentInitStrategy extends PaymentInitStrategy {
     }
 
     @Override
-    @Transactional
     protected Payment initPayment(PaymentRequest paymentRequest, Member member, Orders orders) {
         List<OrderProduct> orderProducts = orders.getOrderProducts();
         List<Coupon> couponList = couponRepository.findByIdInAndMemberId(paymentRequest.getCouponIdList(), member.getId());
@@ -66,7 +63,6 @@ public class DefaultPaymentInitStrategy extends PaymentInitStrategy {
     }
 
     @Override
-    @Transactional
     protected OrderPriceHistory cancelPayment(Orders orders) {
         Payment payment = orders.getNormalPayment();
 

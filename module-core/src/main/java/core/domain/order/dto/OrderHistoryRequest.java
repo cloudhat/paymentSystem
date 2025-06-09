@@ -41,7 +41,7 @@ public class OrderHistoryRequest {
     private LocalDateTime createAtStartDate = LocalDateTime.now().minusMonths(1);
     private LocalDateTime createAtEndDate = LocalDateTime.now();
     private Integer pageNum = 0;
-    private Boolean descending = true;
+    private Boolean descending = Boolean.TRUE;
 
     public PageRequest getPageRequest() {
 

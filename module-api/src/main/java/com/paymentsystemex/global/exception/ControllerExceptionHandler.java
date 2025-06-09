@@ -1,6 +1,5 @@
 package com.paymentsystemex.global.exception;
 
-import com.paymentsystemex.global.auth.AuthenticationException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

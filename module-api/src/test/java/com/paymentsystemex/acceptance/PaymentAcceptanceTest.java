@@ -37,7 +37,7 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PaymentAcceptanceTest extends AcceptanceTest {
+class PaymentAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private ProductRepository productRepository;
@@ -72,7 +72,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
     private String payKey = PayTestController.PAY_KEY;
 
     @BeforeEach
-    public void setGivenDataForOrder() {
+    void setGivenDataForOrder() {
 
         MemberSteps.회원_생성_요청(EMAIL, "password1", 20);
         accessToken = MemberSteps.로그인_요청(EMAIL, "password1");
@@ -143,7 +143,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
              */
             @DisplayName("별도의 할인, 추가비용 없이 결제 초기화 진행 case")
             @Test
-            public void defaultPayment() {
+            void defaultPayment() {
 
                 //when
                 PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", new ArrayList<>(), addressIdMetro);
@@ -162,7 +162,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
              */
             @DisplayName("추가 배달비 포함 구매 초기화 진행 case")
             @Test
-            public void deliveryFeePayment() {
+            void deliveryFeePayment() {
 
                 //when
                 PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
@@ -185,7 +185,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
                  */
                 @DisplayName("고정액수 할인쿠폰을 적용 구매 초기화 진행 case")
                 @Test
-                public void fixedCouponPayment() {
+                void fixedCouponPayment() {
 
                     //when
                     PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", Arrays.asList(fixedCoupon.getId()), addressIdJeju);
@@ -206,7 +206,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
                  */
                 @DisplayName("고정,비율 할인쿠폰을 적용 구매 초기화 진행")
                 @Test
-                public void rateCouponPayment() {
+                void rateCouponPayment() {
                     //given
                     PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", Arrays.asList(rateCoupon.getId(), fixedCoupon.getId()), addressIdJeju);
 
@@ -233,7 +233,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
              */
             @DisplayName("결제수단 할인 구매 초기화 case (네이버 페이)")
             @Test
-            public void naverPayPayment() {
+            void naverPayPayment() {
                 //given
                 PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.NAVER_PAY, "NAVER_PAY", Arrays.asList(rateCoupon.getId(), fixedCoupon.getId()), addressIdJeju);
 
@@ -263,7 +263,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
              */
             @DisplayName("토스페이 결제 정상 시나리오 진행")
             @Test
-            public void TossPayTransactionRequest() {
+            void TossPayTransactionRequest() {
                 //given
                 PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
                 PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
@@ -283,7 +283,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
              */
             @DisplayName("네이버페이 결제 정상 시나리오 진행")
             @Test
-            public void NaverPayTransactionRequest() {
+            void NaverPayTransactionRequest() {
                 //given
                 PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.NAVER_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
                 PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
@@ -311,7 +311,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
          */
         @DisplayName("토스페이 잘못된 payKey 진행")
         @Test
-        public void invalidTossPayKeyTransactionRequest() {
+        void invalidTossPayKeyTransactionRequest() {
             //given
             PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.TOSS_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
             PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
@@ -334,7 +334,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
          */
         @DisplayName("네이버페이 금액이 다른 결제 시나리오 진행")
         @Test
-        public void invalidNaverPayKeyTransactionRequest1() {
+        void invalidNaverPayKeyTransactionRequest1() {
             //given
             PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.NAVER_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
             PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);
@@ -356,7 +356,7 @@ public class PaymentAcceptanceTest extends AcceptanceTest {
          */
         @DisplayName("네이버페이 존재하지 않는 payKey 시나리오")
         @Test
-        public void invalidNaverPayKeyTransactionRequest2() {
+        void invalidNaverPayKeyTransactionRequest2() {
             //given
             PaymentRequest paymentRequest = new PaymentRequest(orderIdempotencyKey, PaymentMethod.NAVER_PAY, "DEFAULT", new ArrayList<>(), addressIdJeju);
             PaymentInitResponse paymentInitResponse = PaymentStep.결제_생성(accessToken, paymentRequest).jsonPath().getObject("", PaymentInitResponse.class);

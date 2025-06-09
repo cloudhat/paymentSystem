@@ -3,7 +3,7 @@ package com.paymentsystemex.domain.order.service;
 import com.paymentsystemex.domain.order.dto.OrderFormResponse;
 import com.paymentsystemex.domain.order.dto.OrderHistoryResponse;
 import com.paymentsystemex.domain.order.dto.OrderResponse;
-import com.paymentsystemex.global.auth.AuthenticationException;
+import com.paymentsystemex.global.exception.AuthenticationException;
 import com.paymentsystemex.global.auth.principal.UserPrincipal;
 import core.domain.cart.entity.Cart;
 import core.domain.member.entity.Member;

@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-public class ProductServiceTestBase extends JpaH2TestBase {
+class ProductServiceTest extends JpaH2TestBase {
 
     @Autowired
     private ProductService productService;
@@ -43,7 +43,7 @@ public class ProductServiceTestBase extends JpaH2TestBase {
     private OrderProduct orderProduct2;
 
     @BeforeEach
-    public void setGivenData() {
+    void setGivenData() {
         ProductOption productOption1 = new ProductOption(1, null, null, "상품옵션1", 10000, PRODUCT1_OPTION_QUANTITY, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
         ProductOption productOption2 = new ProductOption(1, null, null, "상품옵션2", 10000, PRODUCT2_OPTION_QUANTITY, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
         productOption1Id = productRepository.saveProductOption(productOption1).getId();
@@ -55,7 +55,7 @@ public class ProductServiceTestBase extends JpaH2TestBase {
 
     @DisplayName("상품 단건 수량 변경")
     @Test
-    public void updateQuantity() {
+    void updateQuantity() {
         //given
         List<OrderProduct> orderProductList = Arrays.asList(orderProduct1);
         for (int i = 0; i < PRODUCT1_OPTION_QUANTITY; i++) {
@@ -73,7 +73,7 @@ public class ProductServiceTestBase extends JpaH2TestBase {
 
     @DisplayName("동시성 테스트")
     @Test
-    public void concurrencyTest() throws InterruptedException {
+    void concurrencyTest() throws InterruptedException {
         //given
         List<OrderProduct> orderProductList = Arrays.asList(orderProduct1, orderProduct2);
 

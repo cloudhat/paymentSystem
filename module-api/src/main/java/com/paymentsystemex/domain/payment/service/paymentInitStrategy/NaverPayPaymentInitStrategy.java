@@ -17,7 +17,6 @@ import com.paymentsystemex.domain.payment.service.paymentInitStrategy.pricePolic
 import com.paymentsystemex.domain.payment.service.paymentInitStrategy.pricePolicy.ProductPricePolicy;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,7 +36,6 @@ public class NaverPayPaymentInitStrategy extends PaymentInitStrategy {
     }
 
     @Override
-    @Transactional
     protected Payment initPayment(PaymentRequest paymentRequest, Member member, Orders orders) {
 
         //결제수단이 네이버페이가 아닐 경우 예외 처리

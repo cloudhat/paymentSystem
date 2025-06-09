@@ -1,6 +1,6 @@
 package com.paymentsystemex.domain.cart.service;
 
-import com.paymentsystemex.global.auth.AuthenticationException;
+import com.paymentsystemex.global.exception.AuthenticationException;
 import com.paymentsystemex.global.auth.principal.UserPrincipal;
 import core.domain.cart.entity.Cart;
 import core.domain.member.entity.Member;

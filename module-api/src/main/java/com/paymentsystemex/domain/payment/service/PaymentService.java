@@ -1,7 +1,7 @@
 package com.paymentsystemex.domain.payment.service;
 
 import core.domain.payment.repository.PaymentRepository;
-import com.paymentsystemex.global.auth.AuthenticationException;
+import com.paymentsystemex.global.exception.AuthenticationException;
 import com.paymentsystemex.global.auth.principal.UserPrincipal;
 import core.domain.member.entity.Member;
 import core.domain.order.entity.OrderPriceHistory;

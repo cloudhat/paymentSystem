@@ -24,6 +24,8 @@ public class TossPayService implements PayService {
     @Value("${tossPay.cancelTransactionUrl}")
     private String cancelTransactionUrl;
 
+    private static final String FAILURE_KEY = "failure";
+
     @Override
     public PaymentMethod getPaymentMethod() {
         return PaymentMethod.TOSS_PAY;
@@ -40,8 +42,8 @@ public class TossPayService implements PayService {
             throw new IOException("Toss payment server call failed");
         }
 
-        if (jsonObject.containsKey("failure")) {
-            JSONObject failureObj = (JSONObject) jsonObject.get("failure");
+        if (jsonObject.containsKey(FAILURE_KEY)) {
+            JSONObject failureObj = (JSONObject) jsonObject.get(FAILURE_KEY);
             throw new IOException(failureObj.get("message").toString());
         }
     }
@@ -55,8 +57,8 @@ public class TossPayService implements PayService {
             throw new IOException("Toss payment server call failed");
         }
 
-        if (jsonObject.containsKey("failure")) {
-            JSONObject failureObj = (JSONObject) jsonObject.get("failure");
+        if (jsonObject.containsKey(FAILURE_KEY)) {
+            JSONObject failureObj = (JSONObject) jsonObject.get(FAILURE_KEY);
             throw new IOException(failureObj.get("message").toString());
         }
     }

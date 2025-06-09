@@ -81,7 +81,7 @@ public class OrderRepository {
     private OrderSpecifier[] ordersOrderBy(OrderHistoryRequest search) {
         List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
 
-        Order order = search.getDescending() ? Order.DESC : Order.ASC;
+        Order order = Boolean.TRUE.equals(search.getDescending()) ? Order.DESC : Order.ASC;
         orderSpecifiers.add(new OrderSpecifier(order, orders.id));
 
         return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);

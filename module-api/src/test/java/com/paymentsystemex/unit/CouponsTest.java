@@ -17,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-public class CouponsTest {
+class CouponsTest {
 
     //중복불가쿠폰
     private Coupon fixedCoupon;
@@ -36,7 +36,7 @@ public class CouponsTest {
     private final int MAX_DISCOUNT_AMOUNT = 2000;
 
     @BeforeEach
-    public void setGivenData() {
+    void setGivenData() {
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -134,7 +134,7 @@ public class CouponsTest {
 
     @DisplayName("비율쿠폰의 할인율이 최대할인가능액수보다 클 경우 ")
     @Test
-    public void validCouponsCase1() {
+    void validCouponsCase1() {
         //given
         List<Coupon> couponList = new ArrayList<>();
         couponList.add(duplicateAvailableFiexedCoupon);
@@ -156,7 +156,7 @@ public class CouponsTest {
 
     @DisplayName("비율쿠폰의 할인율이 최대할인가능액수보다 작을 경우 ")
     @Test
-    public void validCouponsCase2() {
+    void validCouponsCase2() {
         //given
         List<Coupon> couponList = new ArrayList<>();
         couponList.add(duplicateAvailableFiexedCoupon);
@@ -178,7 +178,7 @@ public class CouponsTest {
 
     @DisplayName("유효기간이 지난 쿠폰 case")
     @Test
-    public void inValidCase1() {
+    void inValidCase1() {
         //given
         List<Coupon> couponList = new ArrayList<>();
         couponList.add(duplicateAvailableFiexedCoupon);
@@ -192,7 +192,7 @@ public class CouponsTest {
 
     @DisplayName("이미 사용한 쿠폰 case")
     @Test
-    public void inValidCase11() {
+    void inValidCase11() {
         //given
         List<Coupon> couponList = new ArrayList<>();
         couponList.add(duplicateAvailableFiexedCoupon);
@@ -206,7 +206,7 @@ public class CouponsTest {
 
     @DisplayName("최소구매급액 미달 case")
     @Test
-    public void inValidCase2() {
+    void inValidCase2() {
         //given
         List<Coupon> couponList = new ArrayList<>();
         couponList.add(duplicateAvailableFiexedCoupon);
@@ -223,7 +223,7 @@ public class CouponsTest {
 
     @DisplayName("적용가능 개수 초과 case")
     @Test
-    public void inValidCase3() {
+    void inValidCase3() {
         //given
         List<Coupon> couponList = new ArrayList<>();
         couponList.add(duplicateAvailableFiexedCoupon);
@@ -238,7 +238,7 @@ public class CouponsTest {
 
     @DisplayName("중복가능쿠폰 불만족 case")
     @Test
-    public void inValidCase4() {
+    void inValidCase4() {
         //given
         List<Coupon> couponList = new ArrayList<>();
         couponList.add(fixedCoupon);
@@ -252,7 +252,7 @@ public class CouponsTest {
 
     @DisplayName("적용가능비율쿠폰 개수 초과 case")
     @Test
-    public void inValidCase5() {
+    void inValidCase5() {
 
         //given
         List<Coupon> couponList = new ArrayList<>();
@@ -267,7 +267,7 @@ public class CouponsTest {
 
     @DisplayName("쿠폰을 적용하지 않은 case")
     @Test
-    public void noCoupon() {
+    void noCoupon() {
         List<Coupon> couponList = new ArrayList<>();
         int totalPrice = MIN_PURCHASE_AMOUNT + 10000;
 

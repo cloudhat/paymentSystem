@@ -3,12 +3,13 @@ package com.paymentsystemex.domain.payment.service.payService;
 import core.domain.payment.entity.PaymentMethod;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PayServiceFactory {
-    private final HashMap<PaymentMethod, PayService> serviceMap = new HashMap<>();
+    private final Map<PaymentMethod, PayService> serviceMap = new EnumMap<>(PaymentMethod.class);
 
     public PayServiceFactory(List<PayService> payServiceList) {
         for (PayService payService : payServiceList) {
@@ -20,7 +21,7 @@ public class PayServiceFactory {
         }
     }
 
-    public PayService getPayService(PaymentMethod paymentMethod){
+    public PayService getPayService(PaymentMethod paymentMethod) {
         return serviceMap.get(paymentMethod);
     }
 }

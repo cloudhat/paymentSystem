@@ -9,7 +9,7 @@ import core.domain.payment.entity.Payment;
 import core.domain.payment.entity.PaymentStatus;
 import core.domain.payment.repository.PaymentRepository;
 import com.paymentsystemex.domain.payment.service.PaymentService;
-import com.paymentsystemex.global.auth.AuthenticationException;
+import com.paymentsystemex.global.exception.AuthenticationException;
 import com.paymentsystemex.global.auth.principal.AuthenticationPrincipal;
 import com.paymentsystemex.global.auth.principal.UserPrincipal;
 import lombok.RequiredArgsConstructor;

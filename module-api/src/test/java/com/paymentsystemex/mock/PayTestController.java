@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PayTestController {
 
-    public final static String PAY_KEY = "payKeyExample";
-    public final static String INVALID_PAY_KEY = "invalidPaymentKey";
-    public final static String FAULURE_MSG = "잘못된 요청입니다.";
-
     private final PaymentRepository paymentRepository;
+
+    public static final String PAY_KEY = "payKeyExample";
+    public static final String INVALID_PAY_KEY = "invalidPaymentKey";
+    public static final String FAULURE_MSG = "잘못된 요청입니다.";
 
     @PostMapping("/v1/payments/confirm")
     public ResponseEntity<JSONObject> tossConfirm(@RequestBody JSONObject jsonObject) {
@@ -54,7 +54,7 @@ public class PayTestController {
 
     @PostMapping("/naverpay-partner/naverpay/payments/v2.2/apply/payment")
     public ResponseEntity<JSONObject> naverPayments(@RequestParam String paymentId) {
-        String payKey = paymentId ;
+        String payKey = paymentId;
 
         JSONObject result = new JSONObject();
         result.put("code", "Success");
@@ -83,7 +83,7 @@ public class PayTestController {
 
     @PostMapping("/naverpay-partner/naverpay/payments/v1/cancel")
     public ResponseEntity<JSONObject> naverCancel(@RequestParam String paymentId) {
-        String payKey = paymentId ;
+        String payKey = paymentId;
 
         JSONObject result = new JSONObject();
         result.put("code", "Success");

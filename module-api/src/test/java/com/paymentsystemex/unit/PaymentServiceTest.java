@@ -22,7 +22,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-public class PaymentServiceTestBase extends JpaH2TestBase {
+class PaymentServiceTest extends JpaH2TestBase {
 
     @Autowired
     MemberRepository memberRepository;
@@ -42,7 +42,7 @@ public class PaymentServiceTestBase extends JpaH2TestBase {
     private Payment expiredPayment;
 
     @BeforeEach
-    public void setGivenData() throws NoSuchFieldException, IllegalAccessException {
+    void setGivenData() throws NoSuchFieldException, IllegalAccessException {
         member = new Member("EMAIL", "PASSWORD", 50);
         memberRepository.save(member);
         Orders orders = new Orders(UUID.randomUUID().toString(), member);
@@ -61,7 +61,7 @@ public class PaymentServiceTestBase extends JpaH2TestBase {
 
     @DisplayName("정상적인 절차로 결제상태를 변경한다")
     @Test
-    public void validTransaction() {
+    void validTransaction() {
         //when
         paymentService.initTransaction(validPayment.getId(), member.getId(), "payKeyExam");
         paymentRepository.updatePaymentStatus(validPayment.getId(), PaymentStatus.FAIL);
@@ -77,7 +77,7 @@ public class PaymentServiceTestBase extends JpaH2TestBase {
 
     @DisplayName("유효기간이 지난 후 결제상태를 변경한다")
     @Test
-    public void expiredTransaction() {
+    void expiredTransaction() {
 
         //when & then
         assertThatThrownBy(() -> paymentService.initTransaction(expiredPayment.getId(), member.getId(), "payKeyExam"))
@@ -86,7 +86,7 @@ public class PaymentServiceTestBase extends JpaH2TestBase {
 
     @DisplayName("이미 transaction이 시작된 payment에 대해 다시 transaction 시도")
     @Test
-    public void invalidTransaction1() {
+    void invalidTransaction1() {
         //when
         paymentService.initTransaction(validPayment.getId(), member.getId(), "payKeyExam");
 
@@ -97,7 +97,7 @@ public class PaymentServiceTestBase extends JpaH2TestBase {
 
     @DisplayName("이미 transaction이 완료된 payment에 대해 다시 transaction 시도")
     @Test
-    public void invalidTransaction2() {
+    void invalidTransaction2() {
         //when
         paymentService.initTransaction(validPayment.getId(), member.getId(), "payKeyExam");
         paymentService.completeTransaction(validPayment.getId(), member.getId());

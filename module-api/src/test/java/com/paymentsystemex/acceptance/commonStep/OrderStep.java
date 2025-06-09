@@ -13,16 +13,13 @@ public class OrderStep {
 
     public static ExtractableResponse<Response> 주문_생성(String accessToken, List<Long> cartIdList) {
 
-        ExtractableResponse<Response> response =
-                RestAssured.given()
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .header("Authorization", "Bearer " + accessToken)
-                        .body(new OrderRequest(cartIdList))
-                        .when().post("/orders")
-                        .then()
-                        .extract();
-
-        return response;
+        return RestAssured.given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + accessToken)
+                .body(new OrderRequest(cartIdList))
+                .when().post("/orders")
+                .then()
+                .extract();
     }
 
     public static ExtractableResponse<Response> 내_주문정보_조회(String accessToken, String idempotencyKey) {
@@ -68,14 +65,11 @@ public class OrderStep {
 
     public static ExtractableResponse<Response> 주문_취소(String accessToken, Long orderId) {
 
-        ExtractableResponse<Response> response =
-                RestAssured.given()
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .header("Authorization", "Bearer " + accessToken)
-                        .when().patch("/orders/cancel/"+orderId)
-                        .then()
-                        .extract();
-
-        return response;
+        return RestAssured.given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + accessToken)
+                .when().patch("/orders/cancel/"+orderId)
+                .then()
+                .extract();
     }
 }

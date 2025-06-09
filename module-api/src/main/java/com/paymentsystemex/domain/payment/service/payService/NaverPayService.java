@@ -50,7 +50,7 @@ public class NaverPayService implements PayService {
 
     @Override
     public void requestCancelTransaction(Long paymentId, String payKey, int totalPayAmount) throws Exception {
-
+        //TODO : 네이버페이 취소 요청 구현
     }
 
     private HashMap<String, Object> doTransactionRequest(String payKey, int totalPayAmount) throws Exception {
@@ -91,7 +91,7 @@ public class NaverPayService implements PayService {
 
     }
 
-    private HashMap<String, Object> doCancelRequest(String payKey, int cancelAmount) throws Exception {
+    private HashMap<String, Object> doCancelRequest(String payKey, int cancelAmount){
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", clientId);
@@ -108,9 +108,7 @@ public class NaverPayService implements PayService {
             throw new RestClientException("");
         }
 
-        HashMap<String, Object> body = response.getBody();
-
-        return body;
+        return response.getBody();
     }
 
 

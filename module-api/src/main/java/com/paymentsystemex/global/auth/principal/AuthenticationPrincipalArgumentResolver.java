@@ -1,9 +1,8 @@
 package com.paymentsystemex.global.auth.principal;
 
 
-import com.paymentsystemex.global.auth.AuthenticationException;
+import com.paymentsystemex.global.exception.AuthenticationException;
 import com.paymentsystemex.global.auth.token.JwtTokenProvider;
-import core.domain.member.repository.MemberRepository;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -14,7 +13,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private JwtTokenProvider jwtTokenProvider;
 
-    public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider, MemberRepository memberRepository) {
+    public AuthenticationPrincipalArgumentResolver(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -38,10 +37,8 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         try {
             String username = jwtTokenProvider.getPrincipal(token);
             String role = jwtTokenProvider.getRoles(token);
-
             return new UserPrincipal(username, role);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new AuthenticationException();
         }
     }
