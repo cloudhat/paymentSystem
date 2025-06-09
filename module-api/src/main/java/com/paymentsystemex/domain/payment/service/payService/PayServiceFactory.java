@@ -1,6 +1,6 @@
 package com.paymentsystemex.domain.payment.service.payService;
 
-import core.domain.payment.entity.PaymentMethod;
+import core.domain.order.entity.payment.PaymentMethod;
 import org.springframework.stereotype.Service;
 
 import java.util.EnumMap;

@@ -1,4 +1,4 @@
-package core.domain.coupon.entity;
+package core.domain.order.entity.coupon;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package core.domain.order.entity;
+package core.domain.order.entity.orderProduct;
 
 public enum DeliveryStatus {
 

@@ -1,17 +1,17 @@
 package com.paymentsystemex.domain.payment.service;
 
-import core.domain.payment.repository.PaymentRepository;
+import core.domain.order.repository.PaymentRepository;
 import com.paymentsystemex.global.exception.AuthenticationException;
 import com.paymentsystemex.global.auth.principal.UserPrincipal;
 import core.domain.member.entity.Member;
-import core.domain.order.entity.OrderPriceHistory;
-import core.domain.order.entity.OrderProduct;
+import core.domain.order.entity.orderPriceHistory.OrderPriceHistory;
+import core.domain.order.entity.orderProduct.OrderProduct;
 import core.domain.order.entity.OrderStatus;
 import core.domain.order.entity.Orders;
-import core.domain.payment.entity.Payment;
-import core.domain.payment.entity.PaymentMethod;
+import core.domain.order.entity.payment.Payment;
+import core.domain.order.entity.payment.PaymentMethod;
 import com.paymentsystemex.domain.payment.dto.PaymentInitResponse;
-import core.domain.payment.dto.PaymentRequest;
+import core.domain.order.dto.PaymentRequest;
 import core.domain.member.repository.MemberRepository;
 import core.domain.order.repository.OrderRepository;
 import com.paymentsystemex.global.messageQueue.DeadLetterQueueService;

@@ -1,6 +1,6 @@
 package com.paymentsystemex.unit;
 
-import core.domain.order.entity.OrderProduct;
+import core.domain.order.entity.orderProduct.OrderProduct;
 import com.paymentsystemex.domain.payment.service.PaymentService;
 import core.domain.product.entity.ProductOption;
 import core.domain.product.repository.ProductRepository;

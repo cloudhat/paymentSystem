@@ -1,7 +1,7 @@
-package core.domain.coupon.repository;
+package core.domain.order.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import core.domain.coupon.entity.Coupon;
+import core.domain.order.entity.coupon.Coupon;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static core.domain.coupon.entity.QCoupon.coupon;
+import static core.domain.order.entity.coupon.QCoupon.coupon;
+
 
 @RequiredArgsConstructor
 @Repository
@@ -19,7 +20,7 @@ public class CouponRepository {
     private final EntityManager em;
 
     @Transactional
-    public Coupon save(Coupon coupon){
+    public Coupon save(Coupon coupon) {
         em.persist(coupon);
         return coupon;
     }
@@ -43,7 +44,6 @@ public class CouponRepository {
                 .where(coupon.orders.id.eq(orderId)
                         .and(coupon.member.id.eq(memberId)))
                 .execute();
-
 
     }
 }

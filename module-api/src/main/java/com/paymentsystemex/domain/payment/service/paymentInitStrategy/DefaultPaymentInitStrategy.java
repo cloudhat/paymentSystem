@@ -1,17 +1,17 @@
 package com.paymentsystemex.domain.payment.service.paymentInitStrategy;
 
-import core.domain.coupon.entity.Coupon;
-import core.domain.coupon.entity.Coupons;
+import core.domain.order.entity.coupon.Coupon;
+import core.domain.order.entity.coupon.Coupons;
 import core.domain.member.entity.Member;
 import core.domain.member.entity.address.Address;
-import core.domain.order.entity.OrderPriceHistory;
-import core.domain.order.entity.OrderProduct;
+import core.domain.order.entity.orderPriceHistory.OrderPriceHistory;
+import core.domain.order.entity.orderProduct.OrderProduct;
 import core.domain.order.entity.Orders;
-import core.domain.order.entity.PriceType;
-import core.domain.payment.entity.Payment;
-import core.domain.payment.dto.PaymentRequest;
+import core.domain.order.entity.orderPriceHistory.PriceType;
+import core.domain.order.entity.payment.Payment;
+import core.domain.order.dto.PaymentRequest;
 import core.domain.cart.repository.CartRepository;
-import core.domain.coupon.repository.CouponRepository;
+import core.domain.order.repository.CouponRepository;
 import core.domain.member.repository.MemberRepository;
 import com.paymentsystemex.domain.payment.service.paymentInitStrategy.pricePolicy.CouponPricePolicy;
 import com.paymentsystemex.domain.payment.service.paymentInitStrategy.pricePolicy.DeliveryFeePolicy;

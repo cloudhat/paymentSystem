@@ -1,4 +1,4 @@
-package core.domain.coupon.entity;
+package core.domain.order.entity.coupon;
 
 
 import core.domain.member.entity.Member;

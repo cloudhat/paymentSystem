@@ -1,7 +1,7 @@
 package com.paymentsystemex.domain.order.dto;
 
-import core.domain.order.entity.DeliveryStatus;
-import core.domain.order.entity.OrderProduct;
+import core.domain.order.entity.orderProduct.DeliveryStatus;
+import core.domain.order.entity.orderProduct.OrderProduct;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

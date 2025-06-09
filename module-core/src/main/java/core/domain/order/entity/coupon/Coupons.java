@@ -1,8 +1,8 @@
-package core.domain.coupon.entity;
+package core.domain.order.entity.coupon;
 
-import core.domain.order.entity.OrderPriceHistory;
+import core.domain.order.entity.orderPriceHistory.OrderPriceHistory;
 import core.domain.order.entity.Orders;
-import core.domain.order.entity.PriceType;
+import core.domain.order.entity.orderPriceHistory.PriceType;
 
 import java.util.ArrayList;
 import java.util.Comparator;

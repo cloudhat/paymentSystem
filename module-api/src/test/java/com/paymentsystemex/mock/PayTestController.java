@@ -1,7 +1,7 @@
 package com.paymentsystemex.mock;
 
-import core.domain.payment.entity.Payment;
-import core.domain.payment.repository.PaymentRepository;
+import core.domain.order.entity.payment.Payment;
+import core.domain.order.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;

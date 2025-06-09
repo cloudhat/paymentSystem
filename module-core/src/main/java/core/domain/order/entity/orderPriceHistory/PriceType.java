@@ -1,4 +1,4 @@
-package core.domain.order.entity;
+package core.domain.order.entity.orderPriceHistory;
 
 
 public enum PriceType {

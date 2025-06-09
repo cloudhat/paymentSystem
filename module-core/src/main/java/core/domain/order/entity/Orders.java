@@ -1,7 +1,9 @@
 package core.domain.order.entity;
 
 import core.domain.member.entity.Member;
-import core.domain.payment.entity.Payment;
+import core.domain.order.entity.orderPriceHistory.OrderPriceHistory;
+import core.domain.order.entity.orderProduct.OrderProduct;
+import core.domain.order.entity.payment.Payment;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

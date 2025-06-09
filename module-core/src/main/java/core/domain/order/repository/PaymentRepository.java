@@ -1,7 +1,7 @@
-package core.domain.payment.repository;
+package core.domain.order.repository;
 
-import core.domain.payment.entity.Payment;
-import core.domain.payment.entity.PaymentStatus;
+import core.domain.order.entity.payment.Payment;
+import core.domain.order.entity.payment.PaymentStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static core.domain.payment.entity.QPayment.payment;
+import static core.domain.order.entity.payment.QPayment.payment;
 
 
 @RequiredArgsConstructor

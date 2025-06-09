@@ -1,6 +1,6 @@
 package com.paymentsystemex.domain.order.dto;
 
-import core.domain.order.entity.OrderPriceHistory;
+import core.domain.order.entity.orderPriceHistory.OrderPriceHistory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

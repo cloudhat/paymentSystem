@@ -1,9 +1,9 @@
 package com.paymentsystemex.domain.payment.service.paymentInitStrategy.pricePolicy;
 
-import core.domain.order.entity.OrderPriceHistory;
-import core.domain.order.entity.OrderProduct;
+import core.domain.order.entity.orderPriceHistory.OrderPriceHistory;
+import core.domain.order.entity.orderProduct.OrderProduct;
 import core.domain.order.entity.Orders;
-import core.domain.order.entity.PriceType;
+import core.domain.order.entity.orderPriceHistory.PriceType;
 
 import java.util.List;
 

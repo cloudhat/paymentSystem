@@ -1,7 +1,7 @@
 package com.paymentsystemex.domain.order.dto;
 
 import core.domain.order.entity.OrderCart;
-import core.domain.order.entity.OrderProduct;
+import core.domain.order.entity.orderProduct.OrderProduct;
 import core.domain.order.entity.Orders;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

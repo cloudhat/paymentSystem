@@ -1,5 +1,6 @@
-package core.domain.order.entity;
+package core.domain.order.entity.orderPriceHistory;
 
+import core.domain.order.entity.Orders;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

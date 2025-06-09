@@ -1,6 +1,6 @@
 package com.paymentsystemex.domain.product.service;
 
-import core.domain.order.entity.OrderProduct;
+import core.domain.order.entity.orderProduct.OrderProduct;
 import core.domain.product.entity.ProductOption;
 import core.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;

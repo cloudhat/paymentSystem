@@ -1,6 +1,7 @@
-package core.domain.order.entity;
+package core.domain.order.entity.orderProduct;
 
 import core.domain.cart.entity.Cart;
+import core.domain.order.entity.Orders;
 import core.domain.product.entity.Product;
 import core.domain.product.entity.ProductOption;
 import jakarta.persistence.*;

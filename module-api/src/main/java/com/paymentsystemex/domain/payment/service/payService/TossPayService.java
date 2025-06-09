@@ -1,6 +1,6 @@
 package com.paymentsystemex.domain.payment.service.payService;
 
-import core.domain.payment.entity.PaymentMethod;
+import core.domain.order.entity.payment.PaymentMethod;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;

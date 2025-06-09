@@ -1,6 +1,6 @@
-package core.domain.payment.dto;
+package core.domain.order.dto;
 
-import core.domain.payment.entity.PaymentMethod;
+import core.domain.order.entity.payment.PaymentMethod;
 import lombok.Getter;
 
 import java.util.ArrayList;

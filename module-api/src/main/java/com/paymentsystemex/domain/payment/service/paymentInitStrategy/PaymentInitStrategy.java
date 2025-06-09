@@ -2,10 +2,10 @@ package com.paymentsystemex.domain.payment.service.paymentInitStrategy;
 
 import core.domain.member.entity.Member;
 import core.domain.order.entity.OrderCart;
-import core.domain.order.entity.OrderPriceHistory;
+import core.domain.order.entity.orderPriceHistory.OrderPriceHistory;
 import core.domain.order.entity.Orders;
-import core.domain.payment.entity.Payment;
-import core.domain.payment.dto.PaymentRequest;
+import core.domain.order.entity.payment.Payment;
+import core.domain.order.dto.PaymentRequest;
 import core.domain.cart.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

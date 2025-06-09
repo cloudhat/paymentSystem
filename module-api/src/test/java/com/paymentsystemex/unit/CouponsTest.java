@@ -1,10 +1,10 @@
 package com.paymentsystemex.unit;
 
-import core.domain.coupon.entity.Coupon;
-import core.domain.coupon.entity.CouponType;
-import core.domain.coupon.entity.Coupons;
+import core.domain.order.entity.coupon.Coupon;
+import core.domain.order.entity.coupon.CouponType;
+import core.domain.order.entity.coupon.Coupons;
 import core.domain.member.entity.Member;
-import core.domain.order.entity.OrderPriceHistory;
+import core.domain.order.entity.orderPriceHistory.OrderPriceHistory;
 import core.domain.order.entity.Orders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

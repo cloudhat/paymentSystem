@@ -1,4 +1,4 @@
-package core.domain.payment.entity;
+package core.domain.order.entity.payment;
 
 
 import core.domain.member.entity.Member;
