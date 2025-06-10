@@ -1,16 +1,16 @@
 package core.domain.order.coupon;
 
-import core.domain.order.entity.coupon.Coupon;
-import core.domain.order.entity.coupon.CouponType;
-import core.domain.order.entity.coupon.Coupons;
 import core.domain.member.entity.Member;
-import core.domain.order.entity.orderPriceHistory.OrderPriceHistory;
 import core.domain.order.entity.Orders;
+import core.domain.order.entity.coupon.Coupon;
+import core.domain.order.entity.coupon.Coupons;
+import core.domain.order.entity.orderPriceHistory.OrderPriceHistory;
+import fixture.core.domain.CouponFixture;
+import fixture.core.domain.MemberFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,99 +37,15 @@ class CouponsTest {
 
     @BeforeEach
     void setGivenData() {
+        Member member = MemberFixture.getMember();
 
-        LocalDateTime now = LocalDateTime.now();
-
-        fixedCoupon = Coupon.builder()
-                .member(new Member())
-                .name("테스트쿠폰")
-                .expireDt(now.plusDays(1))
-                .couponUsed(false)
-                .duplicationAllowed(false)
-                .couponType(CouponType.FIXED)
-                .minPurchaseAmount(MIN_PURCHASE_AMOUNT)
-                .discountAmount(DISCOUNT_AMOUNT)
-                .discountRate(0)
-                .maxDiscountAmount(0)
-                .build();
-
-        rateCoupon = Coupon.builder()
-                .member(new Member())
-                .name("테스트쿠폰")
-                .expireDt(now.plusDays(1))
-                .couponUsed(false)
-                .duplicationAllowed(false)
-                .couponType(CouponType.RATE)
-                .minPurchaseAmount(MIN_PURCHASE_AMOUNT)
-                .discountAmount(0)
-                .discountRate(DISCOUNT_RATE)
-                .maxDiscountAmount(MAX_DISCOUNT_AMOUNT)
-                .build();
-
-        duplicateAvailableFiexedCoupon = Coupon.builder()
-                .member(new Member())
-                .name("테스트쿠폰")
-                .expireDt(now.plusDays(1))
-                .couponUsed(false)
-                .duplicationAllowed(true)
-                .couponType(CouponType.FIXED)
-                .minPurchaseAmount(MIN_PURCHASE_AMOUNT)
-                .discountAmount(DISCOUNT_AMOUNT)
-                .discountRate(0)
-                .maxDiscountAmount(0)
-                .build();
-
-        duplicateAvailableRateCoupon = Coupon.builder()
-                .member(new Member())
-                .name("테스트쿠폰")
-                .expireDt(now.plusDays(1))
-                .couponUsed(false)
-                .duplicationAllowed(true)
-                .couponType(CouponType.RATE)
-                .minPurchaseAmount(MIN_PURCHASE_AMOUNT)
-                .discountAmount(0)
-                .discountRate(DISCOUNT_RATE)
-                .maxDiscountAmount(MAX_DISCOUNT_AMOUNT)
-                .build();
-
-        duplicateAvailableExpiredCoupon = Coupon.builder()
-                .member(new Member())
-                .name("테스트쿠폰")
-                .expireDt(now.minusDays(1))
-                .couponUsed(false)
-                .duplicationAllowed(true)
-                .couponType(CouponType.RATE)
-                .minPurchaseAmount(MIN_PURCHASE_AMOUNT)
-                .discountAmount(0)
-                .discountRate(DISCOUNT_RATE)
-                .maxDiscountAmount(MAX_DISCOUNT_AMOUNT)
-                .build();
-
-        duplicateAvailableUsedCoupon = Coupon.builder()
-                .member(new Member())
-                .name("테스트쿠폰")
-                .expireDt(now.plusDays(1))
-                .couponUsed(true)
-                .duplicationAllowed(true)
-                .couponType(CouponType.RATE)
-                .minPurchaseAmount(MIN_PURCHASE_AMOUNT)
-                .discountAmount(0)
-                .discountRate(DISCOUNT_RATE)
-                .maxDiscountAmount(MAX_DISCOUNT_AMOUNT)
-                .build();
-
-        bigMaxDiscountAmountrateCoupon = Coupon.builder()
-                .member(new Member())
-                .name("테스트쿠폰")
-                .expireDt(now.plusDays(1))
-                .couponUsed(false)
-                .duplicationAllowed(false)
-                .couponType(CouponType.RATE)
-                .minPurchaseAmount(MIN_PURCHASE_AMOUNT)
-                .discountAmount(0)
-                .discountRate(DISCOUNT_RATE)
-                .maxDiscountAmount(1000000)
-                .build();
+        fixedCoupon = CouponFixture.getFixedCoupon(member);
+        rateCoupon = CouponFixture.getRateCoupon(member);
+        duplicateAvailableFiexedCoupon = CouponFixture.getDuplicateAvailableFiexedCoupon(member);
+        duplicateAvailableRateCoupon = CouponFixture.getDuplicateAvailableRateCoupon(member);
+        duplicateAvailableExpiredCoupon = CouponFixture.getDuplicateAvailableExpiredCoupon(member);
+        duplicateAvailableUsedCoupon = CouponFixture.getDuplicateAvailableUsedCoupon(member);
+        bigMaxDiscountAmountrateCoupon = CouponFixture.getBigMaxDiscountAmountrateCoupon(member);
     }
 
     @DisplayName("비율쿠폰의 할인율이 최대할인가능액수보다 클 경우 ")
