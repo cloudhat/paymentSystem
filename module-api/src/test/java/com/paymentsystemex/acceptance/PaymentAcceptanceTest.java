@@ -4,24 +4,24 @@ import com.paymentsystemex.acceptance.commonStep.CartStep;
 import com.paymentsystemex.acceptance.commonStep.MemberSteps;
 import com.paymentsystemex.acceptance.commonStep.OrderStep;
 import com.paymentsystemex.acceptance.commonStep.PaymentStep;
-import core.domain.order.entity.coupon.Coupon;
-import core.domain.order.entity.coupon.CouponType;
-import core.domain.order.repository.CouponRepository;
+import com.paymentsystemex.domain.payment.dto.PaymentInitResponse;
+import com.paymentsystemex.domain.payment.dto.PaymentTransactionResponse;
+import com.paymentsystemex.mock.PayTestController;
+import com.paymentsystemex.utils.AcceptanceTest;
+import core.domain.CouponFixture;
 import core.domain.member.entity.Member;
 import core.domain.member.entity.address.Address;
 import core.domain.member.entity.address.DeliveryCharge;
 import core.domain.member.repository.MemberRepository;
-import com.paymentsystemex.domain.payment.dto.PaymentInitResponse;
 import core.domain.order.dto.PaymentRequest;
-import com.paymentsystemex.domain.payment.dto.PaymentTransactionResponse;
+import core.domain.order.entity.coupon.Coupon;
 import core.domain.order.entity.payment.Payment;
 import core.domain.order.entity.payment.PaymentMethod;
+import core.domain.order.repository.CouponRepository;
 import core.domain.order.repository.PaymentRepository;
 import core.domain.product.entity.Product;
 import core.domain.product.entity.ProductOption;
 import core.domain.product.repository.ProductRepository;
-import com.paymentsystemex.mock.PayTestController;
-import com.paymentsystemex.utils.AcceptanceTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -98,34 +98,11 @@ class PaymentAcceptanceTest extends AcceptanceTest {
         addressIdMetro = memberRepository.save(new Address(null, member, "서울시 동작구 ...", true, DeliveryCharge.METROPOLITAN_AREA)).getId();
         addressIdJeju = memberRepository.save(new Address(null, member, "제주특별자치도 제주시 ...", true, DeliveryCharge.JEJU)).getId();
 
-        Coupon fixedCoupon = Coupon.builder()
-                .member(member)
-                .name("고정할인쿠폰")
-                .expireDt(LocalDateTime.now().plusDays(1))
-                .couponUsed(false)
-                .duplicationAllowed(false)
-                .couponType(CouponType.FIXED)
-                .minPurchaseAmount(10000)
-                .discountAmount(1000)
-                .discountRate(0)
-                .maxDiscountAmount(0)
-                .build();
-
-        Coupon rateCoupon = Coupon.builder()
-                .member(member)
-                .name("비율할인쿠폰")
-                .expireDt(LocalDateTime.now().plusDays(1))
-                .couponUsed(false)
-                .duplicationAllowed(true)
-                .couponType(CouponType.RATE)
-                .minPurchaseAmount(10000)
-                .discountAmount(0)
-                .discountRate(10)
-                .maxDiscountAmount(20000)
-                .build();
+        Coupon fixedCoupon = CouponFixture.getFixedCoupon(member);
+        Coupon duplicateAvailableRateCoupon = CouponFixture.getDuplicateAvailableRateCoupon(member);
 
         this.fixedCoupon = couponRepository.save(fixedCoupon);
-        this.rateCoupon = couponRepository.save(rateCoupon);
+        this.rateCoupon = couponRepository.save(duplicateAvailableRateCoupon);
     }
 
     @Nested

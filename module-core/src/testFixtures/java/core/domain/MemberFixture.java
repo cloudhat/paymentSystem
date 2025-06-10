@@ -1,4 +1,4 @@
-package fixture.core.domain;
+package core.domain;
 
 import core.domain.member.entity.Member;
 
