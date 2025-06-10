@@ -4,6 +4,7 @@ import com.paymentsystemex.acceptance.commonStep.CartStep;
 import com.paymentsystemex.acceptance.commonStep.MemberSteps;
 import com.paymentsystemex.acceptance.commonStep.OrderStep;
 import com.paymentsystemex.acceptance.commonStep.PaymentStep;
+import core.domain.MemberFixture;
 import core.domain.member.entity.Member;
 import core.domain.member.entity.address.Address;
 import core.domain.member.entity.address.DeliveryCharge;
@@ -58,8 +59,8 @@ class OrdersAcceptanceTest extends AcceptanceTest {
     @BeforeEach
     public void setGivenData() {
 
-        MemberSteps.회원_생성_요청("email1@email.com", "password1", 20);
-        accessToken = MemberSteps.로그인_요청("email1@email.com", "password1");
+        MemberSteps.회원_생성_요청(MemberFixture.EMAIL, MemberFixture.PASSWORD, MemberFixture.AGE);
+        accessToken = MemberSteps.로그인_요청(MemberFixture.EMAIL, MemberFixture.PASSWORD);
 
         product1 = new Product(null, null, "검정티셔츠");
         product2 = new Product(null, null, "초록맨투맨");
@@ -71,7 +72,7 @@ class OrdersAcceptanceTest extends AcceptanceTest {
         productRepository.saveProductOption(productOption1);
         productRepository.saveProductOption(productOption2);
 
-        Member member = memberRepository.findByEmail("email1@email.com").get();
+        Member member = memberRepository.findByEmail(MemberFixture.EMAIL).get();
 
         addressIdMetro = memberRepository.save(new Address(null, member, "서울시 동작구 ...", true, DeliveryCharge.METROPOLITAN_AREA)).getId();
     }
@@ -169,7 +170,7 @@ class OrdersAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("결제를 취소한다")
     @Test
-    void cancelTossPay(){
+    void cancelTossPay() {
         //given
         setGivenDataForHistory(1, product1, product2, productOption1, productOption2, addressIdMetro);
         OrderHistoryRequest orderHistoryRequest = OrderHistoryRequest.builder()

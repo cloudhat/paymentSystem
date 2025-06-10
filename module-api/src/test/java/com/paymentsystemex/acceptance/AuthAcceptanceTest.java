@@ -1,9 +1,9 @@
 package com.paymentsystemex.acceptance;
 
-import core.domain.member.entity.Member;
 import com.paymentsystemex.domain.auth.dto.TokenResponse;
-import core.domain.member.repository.MemberRepository;
 import com.paymentsystemex.utils.AcceptanceTest;
+import core.domain.MemberFixture;
+import core.domain.member.repository.MemberRepository;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
@@ -15,9 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthAcceptanceTest extends AcceptanceTest {
 
-    public static final String EMAIL = "admin@email.com";
-    public static final String PASSWORD = "password";
-    public static final Integer AGE = 20;
+    public static final String EMAIL = MemberFixture.EMAIL;
+    public static final String PASSWORD = MemberFixture.PASSWORD;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -31,7 +30,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @Test
     void bearerAuth() {
         //given
-        memberRepository.save(new Member(EMAIL, PASSWORD, AGE));
+        memberRepository.save(MemberFixture.getMember());
 
         //when
         ExtractableResponse<Response> response = 자체_서비스_로그인_요청(EMAIL, PASSWORD);

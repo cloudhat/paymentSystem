@@ -1,5 +1,6 @@
 package com.paymentsystemex.unit;
 
+import core.domain.MemberFixture;
 import core.domain.member.entity.Member;
 import core.domain.member.repository.MemberRepository;
 import core.domain.order.entity.OrderStatus;
@@ -43,7 +44,7 @@ class PaymentServiceTest extends JpaH2TestBase {
 
     @BeforeEach
     void setGivenData() throws NoSuchFieldException, IllegalAccessException {
-        member = new Member("EMAIL", "PASSWORD", 50);
+        member = MemberFixture.getMember();
         memberRepository.save(member);
         Orders orders = new Orders(UUID.randomUUID().toString(), member);
         idempotencyKey = orders.getIdempotencyKey();
