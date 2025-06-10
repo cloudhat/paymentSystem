@@ -52,15 +52,15 @@ public class ProductOption {
     @Column(nullable = false)
     private LocalDateTime updateDate;
 
-    public ProductOption(Integer version, Long id, Product product, String name, int price, int quantity, LocalDateTime saleStartDt, LocalDateTime saleEndDt) {
-        this.version = version;
-        this.id = id;
+    public ProductOption(Product product, String name, int price, int quantity, LocalDateTime saleStartDt, LocalDateTime saleEndDt) {
         this.product = product;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.saleStartDt = saleStartDt;
         this.saleEndDt = saleEndDt;
+
+        product.getProductOptions().add(this);
     }
 
     public boolean isCurrentlyAvailable() {

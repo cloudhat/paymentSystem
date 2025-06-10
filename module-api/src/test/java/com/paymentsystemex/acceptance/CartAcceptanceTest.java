@@ -3,10 +3,11 @@ package com.paymentsystemex.acceptance;
 import com.paymentsystemex.acceptance.commonStep.CartStep;
 import com.paymentsystemex.acceptance.commonStep.MemberSteps;
 import com.paymentsystemex.domain.cart.dto.CartResponse;
+import com.paymentsystemex.utils.AcceptanceTest;
+import core.domain.ProductFixture;
 import core.domain.product.entity.Product;
 import core.domain.product.entity.ProductOption;
 import core.domain.product.repository.ProductRepository;
-import com.paymentsystemex.utils.AcceptanceTest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +31,7 @@ class CartAcceptanceTest extends AcceptanceTest {
     private static final String PASSWORD = "password1";
     private static final int AGE = 20;
 
-    private static final String PRODUCT_NAME = "검정티셔츠";
+    private static String PRODUCT_NAME;
 
     private static final String AVAILABLE_PRODUCT_OPTION_NAME = "L 사이즈";
 
@@ -46,16 +46,15 @@ class CartAcceptanceTest extends AcceptanceTest {
 
         MemberSteps.회원_생성_요청(EMAIL, PASSWORD, AGE);
 
-        Product product = new Product(null, null, PRODUCT_NAME);
+        Product product = ProductFixture.getProduct1();
+        PRODUCT_NAME = product.getName();
 
         productRepository.saveProduct(product);
         productId = product.getId();
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime yesterday = now.minusDays(1);
-        LocalDateTime tomorrow = now.plusDays(1);
-        ProductOption availableProductOption = new ProductOption(1, null, product, AVAILABLE_PRODUCT_OPTION_NAME, 25000, 1, yesterday, tomorrow);
-        ProductOption unAvailableProductOption = new ProductOption(1, null, product, "M 사이즈", 35000, 1, tomorrow, tomorrow);
+
+        ProductOption availableProductOption = ProductFixture.getAvailableProductOption1(product);
+        ProductOption unAvailableProductOption = ProductFixture.getUnAvailableProductOption(product);
         productRepository.saveProductOption(availableProductOption);
         productRepository.saveProductOption(unAvailableProductOption);
 

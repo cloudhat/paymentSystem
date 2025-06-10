@@ -5,6 +5,7 @@ import com.paymentsystemex.acceptance.commonStep.MemberSteps;
 import com.paymentsystemex.acceptance.commonStep.OrderStep;
 import com.paymentsystemex.acceptance.commonStep.PaymentStep;
 import core.domain.MemberFixture;
+import core.domain.ProductFixture;
 import core.domain.member.entity.Member;
 import core.domain.member.entity.address.Address;
 import core.domain.member.entity.address.DeliveryCharge;
@@ -45,9 +46,6 @@ class OrdersAcceptanceTest extends AcceptanceTest {
 
     private static String accessToken;
 
-    private static final int PRODUCT1_PRICE = 20000;
-    private static final int PRODUCT2_PRICE = 10000;
-
     Product product1;
     Product product2;
 
@@ -62,13 +60,13 @@ class OrdersAcceptanceTest extends AcceptanceTest {
         MemberSteps.회원_생성_요청(MemberFixture.EMAIL, MemberFixture.PASSWORD, MemberFixture.AGE);
         accessToken = MemberSteps.로그인_요청(MemberFixture.EMAIL, MemberFixture.PASSWORD);
 
-        product1 = new Product(null, null, "검정티셔츠");
-        product2 = new Product(null, null, "초록맨투맨");
+        product1 = ProductFixture.getProduct1();
+        product2 = ProductFixture.getProduct2();
         productRepository.saveProduct(product1);
         productRepository.saveProduct(product2);
 
-        productOption1 = new ProductOption(0, null, product1, "L 사이즈", PRODUCT1_PRICE, 100, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
-        productOption2 = new ProductOption(0, null, product1, "M 사이즈", PRODUCT2_PRICE, 100, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
+        productOption1 = ProductFixture.getAvailableProductOption1(product1);
+        productOption2 = ProductFixture.getAvailableProductOption1(product2);
         productRepository.saveProductOption(productOption1);
         productRepository.saveProductOption(productOption2);
 

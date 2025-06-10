@@ -38,9 +38,8 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime updateDate;
 
-    public Product(Long id, List<ProductOption> productOptions, String name) {
-        this.id = id;
-        this.productOptions = productOptions;
+    public Product(String name) {
         this.name = name;
     }
+
 }

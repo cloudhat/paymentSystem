@@ -9,6 +9,7 @@ import com.paymentsystemex.domain.payment.dto.PaymentTransactionResponse;
 import com.paymentsystemex.mock.PayTestController;
 import com.paymentsystemex.utils.AcceptanceTest;
 import core.domain.CouponFixture;
+import core.domain.ProductFixture;
 import core.domain.member.entity.Member;
 import core.domain.member.entity.address.Address;
 import core.domain.member.entity.address.DeliveryCharge;
@@ -31,7 +32,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -54,8 +54,8 @@ class PaymentAcceptanceTest extends AcceptanceTest {
     private static String accessToken;
     private Long memberId;
 
-    private static final int PRODUCT1_PRICE = 20000;
-    private static final int PRODUCT2_PRICE = 10000;
+    private static int PRODUCT1_PRICE;
+    private static int PRODUCT2_PRICE;
 
     private static final String EMAIL = "email1@email.com";
     private static final int PRODUCT1_ORDER_QUANTITY = 1;
@@ -78,15 +78,18 @@ class PaymentAcceptanceTest extends AcceptanceTest {
         accessToken = MemberSteps.로그인_요청(EMAIL, "password1");
         memberId = memberRepository.findByEmail(EMAIL).get().getId();
 
-        Product product1 = new Product(null, null, "검정티셔츠");
-        Product product2 = new Product(null, null, "초록맨투맨");
+        Product product1 = ProductFixture.getProduct1();
+        Product product2 = ProductFixture.getProduct2();
         productRepository.saveProduct(product1);
         productRepository.saveProduct(product2);
 
-        ProductOption productOption1 = new ProductOption(1, null, product1, "L 사이즈", PRODUCT1_PRICE, 10, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
-        ProductOption productOption2 = new ProductOption(1, null, product1, "M 사이즈", PRODUCT2_PRICE, 10, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
+        ProductOption productOption1 = ProductFixture.getAvailableProductOption1(product1);
+        ProductOption productOption2 = ProductFixture.getAvailableProductOption2(product2);
         productRepository.saveProductOption(productOption1);
         productRepository.saveProductOption(productOption2);
+        PRODUCT1_PRICE = ProductFixture.PRICE_OF_AVAILABLE_PRODUCT_OPTION1;
+        PRODUCT2_PRICE = ProductFixture.PRICE_OF_AVAILABLE_PRODUCT_OPTION2;
+
 
         Long cart1Id = CartStep.장바구니_생성(accessToken, product1.getId(), productOption1.getId(), PRODUCT1_ORDER_QUANTITY).jsonPath().getLong("id");
         Long cart2Id = CartStep.장바구니_생성(accessToken, product2.getId(), productOption2.getId(), PRODUCT2_ORDER_QUANTITY).jsonPath().getLong("id");
